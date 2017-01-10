@@ -84,7 +84,7 @@ public class TestFixture<TStartup> : IDisposable where TStartup : class
 Now all the things are tied up, how to faked a user?
 
 I've defined tree methods :
- - A token with a custom objetc
+ - A token with a custom object
  - A token with a Username
  - A token with a Username and some roles
 
