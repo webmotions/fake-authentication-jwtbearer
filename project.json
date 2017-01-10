@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "description": "ASP.NET Core middleware that enables an application to receive a FAKE bearer token.",
+  "buildOptions": {
+    "warningsAsErrors": true,
+    "nowarn": [
+      "CS1591"
+    ]
+  },
+  "dependencies": {
+    "Microsoft.AspNetCore.Authentication": "1.1.0",
+    "Newtonsoft.Json": "9.0.2-beta1",
+    "System.Text.Encodings.Web": "4.3.0"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+  "configurations": {
+    "Pre-release": {}
+  }
+}
