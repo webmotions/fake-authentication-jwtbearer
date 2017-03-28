@@ -6,6 +6,8 @@ This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://gi
 
 ## How to install it?
 
+First add this package to your Nuget configuration file : [GST.Fake.Authentication.JwtBearer 1.0.0](https://www.nuget.org/packages/GST.Fake.Authentication.JwtBearer/1.0.0).
+
 Let's imagine we are coding integration tests in the project `MyApp.TestsIntegration`.
 
 This is the tree of the global solution:
@@ -17,13 +19,10 @@ This is the tree of the global solution:
 +---test
 | +---MyApp.Tests
 | +---MyApp.TestsIntegration
-| \---GST.Fake.Authentication.JwtBearer
 ```
 
 My integration test are based on this tutorial [Introduction to integration testing with xUnit and TestServer in ASP.NET Core](http://andrewlock.net/introduction-to-integration-testing-with-xunit-and-testserver-in-asp-net-core/).  
 So I have a `TestFixture.cs` file where I can extend configurations made in the `Startup.cs` file.
-
-First, Clone this repository in your test folder.
 
 Next add a class called `AddConfiguration` in the root of `MyApp.TestsIntegration`.  
 This class will make the link between our application and the Jwt Bearer faker
