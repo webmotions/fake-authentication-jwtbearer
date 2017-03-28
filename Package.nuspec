@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GST.Fake.Authentication.JwtBearer</id>
+    <version>1.0.0</version>
+    <authors>Valérian Girard</authors>
+    <owners>Gestion Systèmes Télécom (GST)</owners>
+    <licenseUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer</projectUrl>
+    <iconUrl>https://avatars3.githubusercontent.com/u/25814331</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package allow to fake a JWT Bearer and build integration test for ASP.Net Core application.</description>
+    <tags>ASP.Net Core JWT Bearer Authentication Test</tags>
+    <dependencies>
+      <dependency id="Microsoft.AspNetCore.Authentication" version="1.1.0" />
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+      <dependency id="System.Text.Encodings.Web" version="4.3.0" />
+    </dependencies>
+  </metadata>
+</package>

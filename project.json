@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "Microsoft.AspNetCore.Authentication": "1.1.0",
-    "Newtonsoft.Json": "9.0.2-beta1",
+    "Newtonsoft.Json": "9.0.1",
     "System.Text.Encodings.Web": "4.3.0"
   },
   "frameworks": {
