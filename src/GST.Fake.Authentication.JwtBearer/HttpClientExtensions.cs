@@ -4,6 +4,9 @@ using System.Net.Http.Headers;
 
 namespace GST.Fake.Authentication.JwtBearer
 {
+    /// <summary>
+    /// Allow to set username, roles or anything useful for faking a user
+    /// </summary>
     public static class HttpClientExtensions
     {
 
