@@ -16,6 +16,6 @@ deploy:
   - provider: NuGet
     api_key:
       secure: QsjsTYGlMBE2oXS8QLMq3TvzcKhW/xatLFuSg+vfoJeaLYxJ1mpfMWs+8chehZbo
-    artifact: /GST\.Fake\.Authentication\.JwtBearer*\.nupkg/
+    artifact: /GST\.Fake\.Authentication\.JwtBearer.*\.nupkg/
 test_script:
 - dotnet test -f netcoreapp1.1 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/project.json
