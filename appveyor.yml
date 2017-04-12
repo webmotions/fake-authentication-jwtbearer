@@ -1,0 +1,21 @@
+image: Visual Studio 2015
+init:
+  - git config --global core.autocrlf true
+install:
+  - ECHO %APPVEYOR_BUILD_WORKER_IMAGE%
+  - dotnet --version
+  - dotnet restore ./project.json
+build_script:
+- powershell .\build.ps1 -t BuildPackages
+before_build:
+- appveyor-retry dotnet restore -v Minimal
+artifacts:
+  - path: 'artifacts\*.nupkg'
+    name: Nuget
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: QsjsTYGlMBE2oXS8QLMq3TvzcKhW/xatLFuSg+vfoJeaLYxJ1mpfMWs+8chehZbo
+    artifact: /GST\.Library.*\.nupkg/
+test_script:
+- dotnet test -f netcoreapp1.1 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/project.json

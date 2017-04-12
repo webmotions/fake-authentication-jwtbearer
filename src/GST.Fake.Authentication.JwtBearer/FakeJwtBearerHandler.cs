@@ -31,9 +31,9 @@ namespace GST.Fake.Authentication.JwtBearer
                     return Task.FromResult(AuthenticateResult.Skip());
                 }
 
-                if (authorization.StartsWith("FakeBearer ", StringComparison.OrdinalIgnoreCase))
+                if (authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                 {
-                    token = authorization.Substring("FakeBearer ".Length).Trim();
+                    token = authorization.Substring("Bearer ".Length).Trim();
                 }
 
                 // If no token found, no further work possible
@@ -45,8 +45,6 @@ namespace GST.Fake.Authentication.JwtBearer
                 dynamic tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(token);
 
                 ClaimsIdentity id = new ClaimsIdentity("Identity.Application", "name", "role");
-
-                
 
                 foreach(var td in tokenDecoded)
                 {

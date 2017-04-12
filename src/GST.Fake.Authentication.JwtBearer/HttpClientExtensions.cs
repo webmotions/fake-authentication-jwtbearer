@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace GST.Fake.Authentication.JwtBearer
 {
@@ -16,9 +12,12 @@ namespace GST.Fake.Authentication.JwtBearer
         /// </summary>
         /// <param name="client"></param>
         /// <param name="token"></param>
-        public static void SetFakeBearerToken(this HttpClient client, object token)
+        /// <returns></returns>
+        public static HttpClient SetFakeBearerToken(this HttpClient client, object token)
         {
-            client.SetToken("FakeBearer", JsonConvert.SerializeObject(token));
+            client.SetToken("Bearer", JsonConvert.SerializeObject(token));
+
+            return client;
         }
 
         /// <summary>
@@ -26,12 +25,15 @@ namespace GST.Fake.Authentication.JwtBearer
         /// </summary>
         /// <param name="client"></param>
         /// <param name="username"></param>
-        public static void SetFakeBearerToken(this HttpClient client, string username)
+        /// <returns></returns>
+        public static HttpClient SetFakeBearerToken(this HttpClient client, string username)
         {
             client.SetFakeBearerToken(new
             {
                 sub = username
             });
+
+            return client;
         }
 
         /// <summary>
@@ -40,7 +42,8 @@ namespace GST.Fake.Authentication.JwtBearer
         /// <param name="client"></param>
         /// <param name="username"></param>
         /// <param name="roles"></param>
-        public static void SetFakeBearerToken(this HttpClient client, string username, string[] roles)
+        /// <returns></returns>
+        public static HttpClient SetFakeBearerToken(this HttpClient client, string username, string[] roles)
         {
 
             client.SetFakeBearerToken(new
@@ -48,12 +51,22 @@ namespace GST.Fake.Authentication.JwtBearer
                 sub = username,
                 role = roles
             });
+
+            return client;
         }
 
-
-        public static void SetToken(this HttpClient client, string scheme, string token)
+        /// <summary>
+        /// Set Raw Tocken
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="scheme"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static HttpClient SetToken(this HttpClient client, string scheme, string token)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme, token);
+
+            return client;
         }
     }
 }
