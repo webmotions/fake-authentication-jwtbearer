@@ -4,7 +4,7 @@ init:
 install:
   - ECHO %APPVEYOR_BUILD_WORKER_IMAGE%
   - dotnet --version
-  - dotnet restore ./project.json
+  - dotnet restore ./src/GST.Fake.Authentication.JwtBearer/project.json
 build_script:
 - powershell .\build.ps1 -t BuildPackages
 before_build:
