@@ -52,7 +52,7 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                 });
 
             Assert.Equal(
-                "Bearer {\"sub\":\"Bob\",\"role\":[\"Role 1\",\"Role 2\"]}",
+                "FakeBearer {\"sub\":\"Bob\",\"role\":[\"Role 1\",\"Role 2\"]}",
                 response.Request.Headers.GetValues("Authorization").FirstOrDefault());
         }
 

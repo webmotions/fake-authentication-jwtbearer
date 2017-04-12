@@ -31,9 +31,9 @@ namespace GST.Fake.Authentication.JwtBearer
                     return Task.FromResult(AuthenticateResult.Skip());
                 }
 
-                if (authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                if (authorization.StartsWith("FakeBearer ", StringComparison.OrdinalIgnoreCase))
                 {
-                    token = authorization.Substring("Bearer ".Length).Trim();
+                    token = authorization.Substring("FakeBearer ".Length).Trim();
                 }
 
                 // If no token found, no further work possible

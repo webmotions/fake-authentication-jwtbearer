@@ -15,7 +15,7 @@ namespace GST.Fake.Authentication.JwtBearer
         /// <returns></returns>
         public static HttpClient SetFakeBearerToken(this HttpClient client, object token)
         {
-            client.SetToken("Bearer", JsonConvert.SerializeObject(token));
+            client.SetToken("FakeBearer", JsonConvert.SerializeObject(token));
 
             return client;
         }
