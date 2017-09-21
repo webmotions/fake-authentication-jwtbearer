@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -54,6 +54,24 @@ namespace GST.Fake.Authentication.JwtBearer
                 sub = username,
                 role = roles
             });
+
+            return client;
+        }
+
+        /// <summary>
+        /// Define a Token with a Username and some roles and otherclaim
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="username"></param>
+        /// <param name="roles"></param>
+        /// <param name="claim"></param>
+        /// <returns></returns>
+        public static HttpClient SetFakeBearerToken(this HttpClient client, string username, string[] roles, dynamic claim)
+        {
+            claim.sub = username;
+            claim.role = roles;
+
+            client.SetFakeBearerToken((object) claim);
 
             return client;
         }

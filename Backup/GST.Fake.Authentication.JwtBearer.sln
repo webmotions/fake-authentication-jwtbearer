@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{77DE8FBC-95B3-4124-854C-65E68B8EB95F}"
 EndProject
@@ -9,14 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.ps1 = build.ps1
 		build.sh = build.sh
+		global.json = global.json
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GST.Fake.Authentication.JwtBearer", "src\GST.Fake.Authentication.JwtBearer\GST.Fake.Authentication.JwtBearer.xproj", "{CC06701D-9669-45A2-BB2A-89C3F1DDEB74}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4DB1A50B-D4DC-4CE1-AEE5-995E526F6E5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GST.Fake.Authentication.JwtBearer", "src\GST.Fake.Authentication.JwtBearer\GST.Fake.Authentication.JwtBearer.csproj", "{CC06701D-9669-45A2-BB2A-89C3F1DDEB74}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GST.Fake.Authentication.JwtBearer.Tests", "test\GST.Fake.Authentication.JwtBearer.Tests\GST.Fake.Authentication.JwtBearer.Tests.csproj", "{FC64631B-F006-4109-8A1E-A461D15102D3}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GST.Fake.Authentication.JwtBearer.Tests", "test\GST.Fake.Authentication.JwtBearer.Tests\GST.Fake.Authentication.JwtBearer.Tests.xproj", "{FC64631B-F006-4109-8A1E-A461D15102D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +34,8 @@ Global
 		{CC06701D-9669-45A2-BB2A-89C3F1DDEB74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC64631B-F006-4109-8A1E-A461D15102D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC64631B-F006-4109-8A1E-A461D15102D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC64631B-F006-4109-8A1E-A461D15102D3}.Pre-release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC64631B-F006-4109-8A1E-A461D15102D3}.Pre-release|Any CPU.Build.0 = Release|Any CPU
+		{FC64631B-F006-4109-8A1E-A461D15102D3}.Pre-release|Any CPU.ActiveCfg = Pre-release|Any CPU
+		{FC64631B-F006-4109-8A1E-A461D15102D3}.Pre-release|Any CPU.Build.0 = Pre-release|Any CPU
 		{FC64631B-F006-4109-8A1E-A461D15102D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC64631B-F006-4109-8A1E-A461D15102D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
@@ -44,8 +45,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CC06701D-9669-45A2-BB2A-89C3F1DDEB74} = {77DE8FBC-95B3-4124-854C-65E68B8EB95F}
 		{FC64631B-F006-4109-8A1E-A461D15102D3} = {4DB1A50B-D4DC-4CE1-AEE5-995E526F6E5A}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4E23AEBD-955B-482E-903C-5318B5D82149}
 	EndGlobalSection
 EndGlobal
