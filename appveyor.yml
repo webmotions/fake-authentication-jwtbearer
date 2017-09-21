@@ -4,9 +4,10 @@ init:
 install:
   - ECHO %APPVEYOR_BUILD_WORKER_IMAGE%
   - dotnet --version
-  - dotnet restore ./src/GST.Fake.Authentication.JwtBearer/project.json
+  - dotnet restore ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj
 build_script:
-- powershell .\build.ps1 -t BuildPackages
+- nuget restore ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj
+- nuget pack ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj -Build -Symbols -Properties Configuration=Release -OutputDirectory ./
 before_build:
 - appveyor-retry dotnet restore -v Minimal
 artifacts:
@@ -18,4 +19,4 @@ deploy:
       secure: QsjsTYGlMBE2oXS8QLMq3TvzcKhW/xatLFuSg+vfoJeaLYxJ1mpfMWs+8chehZbo
     artifact: /GST\.Fake\.Authentication\.JwtBearer.*\.nupkg/
 test_script:
-- dotnet test -f netcoreapp1.1 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/project.json
+- dotnet test -f netcoreapp1.1 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/GST.Fake.Authentication.JwtBearer.Tests.csproj
