@@ -1,21 +1,15 @@
-﻿using GST.Fake.Builder;
+using GST.Fake.Builder;
 using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
 namespace GST.Fake.Authentication.JwtBearer.Tests
