@@ -1,16 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.0.3</VersionPrefix>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <Version>1.0.4</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>GST.Fake.Authentication.JwtBearer</AssemblyName>
     <PackageId>GST.Fake.Authentication.JwtBearer</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Description>This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core application.
+By this way we can fake any authentication we need, without the need to really authenticate a user.</Description>
+    <Copyright>Gestion Systèmes Télécom (GST)</Copyright>
+    <PackageProjectUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/25814331</PackageIconUrl>
+    <PackageTags>ASP.Net Core JWT Bearer Authentication Test</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
