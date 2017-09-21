@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -15,7 +15,7 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
     {
         public const string CookieAuthenticationScheme = "External";
 
-        public static async Task<Transaction> SendAsync(this TestServer server, string uri, string cookieHeader = null, string username = null, string[] roles = null)
+        public static async Task<Transaction> SendAsync(this TestServer server, string uri, string cookieHeader = null, string username = null, string[] roles = null, object claims = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             if (!string.IsNullOrEmpty(cookieHeader))
@@ -25,9 +25,13 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
 
             HttpClient client = server.CreateClient();
 
-            if(username != null)
+            if(username != null && claims == null)
             {
                 client.SetFakeBearerToken(username, roles);
+            }
+            else if (username != null && claims != null)
+            {
+                client.SetFakeBearerToken(username, roles, claims);
             }
 
             var transaction = new Transaction

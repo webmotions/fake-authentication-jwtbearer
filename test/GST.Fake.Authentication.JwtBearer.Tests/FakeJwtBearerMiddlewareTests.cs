@@ -50,6 +50,31 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                 response.Request.Headers.GetValues("Authorization").FirstOrDefault());
         }
 
+        [Fact]
+        public async Task CustomHeader2Received()
+        {
+            var server = CreateServer(new FakeJwtBearerOptions());
+
+            dynamic claims = new System.Dynamic.ExpandoObject();
+            claims.organism = "An Organism";
+            claims.other = new System.Dynamic.ExpandoObject();
+            claims.other.aa = "aa";
+            claims.other.bb = "bb";
+
+            var response = await server.SendAsync(
+                "http://example.com/oauth",
+                "someHeader someblob",
+                "Bob",
+                new string[] {
+                    "Role 1", "Role 2"
+                },
+                (object) claims);
+
+            Assert.Equal(
+                "FakeBearer {\"organism\":\"An Organism\",\"other\":{\"aa\":\"aa\",\"bb\":\"bb\"},\"sub\":\"Bob\",\"role\":[\"Role 1\",\"Role 2\"]}",
+                response.Request.Headers.GetValues("Authorization").FirstOrDefault());
+        }
+
         private static TestServer CreateServer(FakeJwtBearerOptions options)
         {
             return CreateServer(options, handlerBeforeAuth: null);
