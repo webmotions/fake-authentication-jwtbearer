@@ -11,7 +11,7 @@ namespace GST.Fake.Builder
     public static class FakeJwtBearerAppBuilderExtensions
     {
         /// <summary>
-        /// Adds the <see cref="JwtBearerMiddleware"/> middleware to the specified <see cref="IApplicationBuilder"/>, which enables Bearer token processing capabilities.
+        /// Adds the JwtBearerMiddleware middleware to the specified IApplicationBuilder, which enables Bearer token processing capabilities.
         /// This middleware understands appropriately
         /// formatted and secured tokens which appear in the request header. If the Options.AuthenticationMode is Active, the
         /// claims within the bearer token are added to the current request's IPrincipal User. If the Options.AuthenticationMode 
@@ -32,7 +32,7 @@ namespace GST.Fake.Builder
         }
 
         /// <summary>
-        /// Adds the <see cref="JwtBearerMiddleware"/> middleware to the specified <see cref="IApplicationBuilder"/>, which enables Bearer token processing capabilities.
+        /// Adds the JwtBearerMiddleware middleware to the specified IApplicationBuilder, which enables Bearer token processing capabilities.
         /// This middleware understands appropriately
         /// formatted and secured tokens which appear in the request header. If the Options.AuthenticationMode is Active, the
         /// claims within the bearer token are added to the current request's IPrincipal User. If the Options.AuthenticationMode 
@@ -40,8 +40,8 @@ namespace GST.Fake.Builder
         /// any time to obtain the claims from the request's bearer token.
         /// See also http://tools.ietf.org/html/rfc6749
         /// </summary>
-        /// <param name="app">The <see cref="IApplicationBuilder"/> to add the middleware to.</param>
-        /// <param name="options">A  <see cref="JwtBearerOptions"/> that specifies options for the middleware.</param>
+        /// <param name="app">The IApplicationBuilder to add the middleware to.</param>
+        /// <param name="options">A JwtBearerOptions that specifies options for the middleware.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static IApplicationBuilder UseFakeJwtBearerAuthentication(this IApplicationBuilder app, FakeJwtBearerOptions options)
         {

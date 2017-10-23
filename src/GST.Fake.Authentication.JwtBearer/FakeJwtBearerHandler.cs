@@ -15,7 +15,7 @@ namespace GST.Fake.Authentication.JwtBearer
     {
 
         /// <summary>
-        /// Searches the 'Authorization' header for a 'FakeBearer' token. If the 'FakeBearer' token is found, it is validated using <see cref="TokenValidationParameters"/> set in the options.
+        /// Searches the 'Authorization' header for a 'FakeBearer' token. If the 'FakeBearer' token is found, it is validated using TokenValidationParameters set in the options.
         /// </summary>
         /// <returns></returns>
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()

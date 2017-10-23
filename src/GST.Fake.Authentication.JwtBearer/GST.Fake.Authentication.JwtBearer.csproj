@@ -19,6 +19,7 @@ By this way we can fake any authentication we need, without the need to really a
     <PackageLicenseUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/25814331</PackageIconUrl>
     <PackageTags>ASP.Net Core JWT Bearer Authentication Test</PackageTags>
+    <Authors>Gestion Systèmes Télécom (GST)</Authors>
   </PropertyGroup>
 
   <ItemGroup>

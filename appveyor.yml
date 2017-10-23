@@ -7,7 +7,7 @@ install:
   - dotnet restore ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj
 build_script:
 - nuget restore ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj
-- nuget pack ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj -Build -Symbols -Properties Configuration=Release -OutputDirectory ./
+- nuget pack ./src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj -Build -Symbols -Properties Configuration=Release
 before_build:
 - appveyor-retry dotnet restore -v Minimal
 artifacts:
