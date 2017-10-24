@@ -1,12 +1,14 @@
-# Fake Authentication Jwt Bearer
+# Fake Authentication Jwt Bearer for ASP.NET Core 2
 
 This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core application.  
 By this way we can fake any authentication we need, without the need to really authenticate a user.  
 This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://github.com/aspnet/Security/tree/dev/src/Microsoft.AspNetCore.Authentication.JwtBearer).
 
+ > If You need it for ASP.NET Core 1, check [Tag 1.0.4](/tree/1.0.4)
+
 ## How to install it?
 
-First add this package to your Nuget configuration file : [GST.Fake.Authentication.JwtBearer 1.0.0](https://www.nuget.org/packages/GST.Fake.Authentication.JwtBearer/1.0.0).
+First add this package to your Nuget configuration file : [GST.Fake.Authentication.JwtBearer](https://www.nuget.org/packages/GST.Fake.Authentication.JwtBearer).
 
 Let's imagine we are coding integration tests in the project `MyApp.TestsIntegration`.
 
@@ -24,32 +26,8 @@ This is the tree of the global solution:
 My integration test are based on this tutorial [Introduction to integration testing with xUnit and TestServer in ASP.NET Core](http://andrewlock.net/introduction-to-integration-testing-with-xunit-and-testserver-in-asp-net-core/).  
 So I have a `TestFixture.cs` file where I can extend configurations made in the `Startup.cs` file.
 
-Next add a class called `AddConfiguration` in the root of `MyApp.TestsIntegration`.  
-This class will make the link between our application and the Jwt Bearer faker
-
-```C#
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using System;
-using GST.Fake.Builder;
-
-namespace MyApp.TestsIntegration
-{
-    public class AddConfiguration : IStartupFilter
-    {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
-        {
-            return builder =>
-            {
-                builder.UseFakeJwtBearerAuthentication();
-                next(builder);
-            };
-        }
-    }
-}
-```
-
-in the class `TestFixture.cs` we have to extend the configuration of our Startup.
+In the class `TestFixture.cs` we have to extend the configuration of our Startup.  
+You have to disable you original `AddJwtBearer` in your `Startup.cs`, because the `AddFakeJwtBearer` doesno't overload the original.
 
 ```C#
 public class TestFixture<TStartup> : IDisposable where TStartup : class
@@ -70,7 +48,8 @@ public class TestFixture<TStartup> : IDisposable where TStartup : class
       .ConfigureServices(x =>
       {
           // Here we add our new configuration
-          x.AddTransient<IStartupFilter, AddConfiguration>()
+          x.AddAuthentication()
+		  .AddFakeJwtBearer()
           ;
       });
       // ...
@@ -118,6 +97,20 @@ I've defined tree methods :
              // We call a private API with a full authenticated user (admin)
              var response = fixture.Client.GetAsync("/api/my-account").Result;
              Assert.True(response.IsSuccessStatusCode);
+         }
+
+		 
+         [Fact]
+         public void testCallPrivate2API()
+         {
+		 dynamic data = new System.Dynamic.ExpandoObject();
+            data.organism = "ACME";
+            data.thing = "more things";
+            fixture.Client.SetFakeBearerToken("SUperUserName", new[] { "Role1", "Role2" }, (object)data);
+
+            // We call a private API with a full authenticated user (admin)
+            var response = fixture.Client.GetAsync("/api/my-account").Result;
+            Assert.True(response.IsSuccessStatusCode);
          }
      }
  }

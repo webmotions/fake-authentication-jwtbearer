@@ -1,5 +1,3 @@
-
-
 namespace GST.Fake.Authentication.JwtBearer
 {
     /// <summary>

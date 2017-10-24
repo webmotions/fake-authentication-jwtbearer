@@ -21,14 +21,10 @@ namespace GST.Fake.Builder
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to add the middleware to.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
+        [Obsolete("See https://go.microsoft.com/fwlink/?linkid=845470", error: true)]
         public static IApplicationBuilder UseFakeJwtBearerAuthentication(this IApplicationBuilder app)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
-            return app.UseMiddleware<FakeJwtBearerMiddleware>();
+            throw new NotSupportedException("This method is no longer supported, see https://go.microsoft.com/fwlink/?linkid=845470");
         }
 
         /// <summary>
@@ -43,18 +39,10 @@ namespace GST.Fake.Builder
         /// <param name="app">The IApplicationBuilder to add the middleware to.</param>
         /// <param name="options">A JwtBearerOptions that specifies options for the middleware.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
+        [Obsolete("See https://go.microsoft.com/fwlink/?linkid=845470", error: true)]
         public static IApplicationBuilder UseFakeJwtBearerAuthentication(this IApplicationBuilder app, FakeJwtBearerOptions options)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            return app.UseMiddleware<FakeJwtBearerMiddleware>(Options.Create(options));
+            throw new NotSupportedException("This method is no longer supported, see https://go.microsoft.com/fwlink/?linkid=845470");
         }
     }
 }

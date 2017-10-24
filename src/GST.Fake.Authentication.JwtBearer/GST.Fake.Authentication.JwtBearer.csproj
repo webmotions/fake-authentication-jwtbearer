@@ -1,11 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <Version>1.0.4</Version>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <Version>2.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>GST.Fake.Authentication.JwtBearer</AssemblyName>
     <PackageId>GST.Fake.Authentication.JwtBearer</PackageId>
@@ -18,15 +16,18 @@ By this way we can fake any authentication we need, without the need to really a
     <PackageProjectUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/25814331</PackageIconUrl>
-    <PackageTags>ASP.Net Core JWT Bearer Authentication Test</PackageTags>
+    <PackageTags>ASP.Net Core;JWT Bearer;Authentication Test</PackageTags>
     <Authors>Gestion Systèmes Télécom (GST)</Authors>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
 </Project>
