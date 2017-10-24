@@ -18,9 +18,9 @@ By this way we can fake any authentication we need, without the need to really a
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/25814331</PackageIconUrl>
     <PackageTags>ASP.Net Core;JWT Bearer;Authentication Test</PackageTags>
     <Authors>Gestion Systèmes Télécom (GST)</Authors>
-    <ApplicationIcon />
+    <RepositoryType>nuget</RepositoryType>
     <OutputType>Library</OutputType>
-    <StartupObject />
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
