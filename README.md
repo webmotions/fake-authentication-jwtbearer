@@ -68,7 +68,7 @@ I've defined tree methods :
 
  Let see that in a real world example.
 
- ````C#
+```C#
  using GST.Fake.Authentication.JwtBearer;
  using Newtonsoft.Json;
  using Newtonsoft.Json.Linq;
