@@ -4,7 +4,7 @@ This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core
 By this way we can fake any authentication we need, without the need to really authenticate a user.  
 This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://github.com/aspnet/Security/tree/dev/src/Microsoft.AspNetCore.Authentication.JwtBearer).
 
- > If You need it for ASP.NET Core 1, check [Tag 1.0.4](/tree/1.0.4)
+ > If You need it for ASP.NET Core 1, check [Tag 1.0.4](https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/tree/1.0.4)
 
 ## How to install it?
 
@@ -114,4 +114,4 @@ I've defined tree methods :
          }
      }
  }
- ```
+```
