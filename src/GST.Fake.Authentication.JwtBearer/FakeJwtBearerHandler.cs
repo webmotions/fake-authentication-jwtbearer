@@ -31,7 +31,13 @@ namespace GST.Fake.Authentication.JwtBearer
         /// </summary>
         protected new JwtBearerEvents Events
         {
-            get { return (JwtBearerEvents)base.Events; }
+            get {
+                if(base.Events is JwtBearerEvents)
+                {
+                    return base.Events as JwtBearerEvents;
+                }
+                base.Events = new JwtBearerEvents();
+                return base.Events as JwtBearerEvents; }
             set { base.Events = value; }
         }
 

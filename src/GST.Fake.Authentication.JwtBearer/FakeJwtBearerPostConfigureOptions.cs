@@ -1,11 +1,12 @@
 ﻿using GST.Fake.Builder;
+using Microsoft.Extensions.Options;
 
 namespace GST.Fake.Authentication.JwtBearer
 {
     /// <summary>
     /// Used to setup defaults for all <see cref="FakeJwtBearerOptions"/>.
     /// </summary>
-    public class FakeJwtBearerPostConfigureOptions
+    public class FakeJwtBearerPostConfigureOptions : IPostConfigureOptions<FakeJwtBearerOptions>
     {
         /// <summary>
         /// Invoked to post configure a JwtBearerOptions instance.
