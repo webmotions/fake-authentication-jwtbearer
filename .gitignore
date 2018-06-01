@@ -6,5 +6,4 @@
 /Coverage/
 Coverage.xml
 nupkgs/
-tools/
 **/project.lock.json
