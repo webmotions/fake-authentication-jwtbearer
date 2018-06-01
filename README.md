@@ -121,5 +121,5 @@ I've defined tree methods :
 ```bash
 dotnet build src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --framework netcoreapp2.0 --force
 dotnet pack src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --include-source --include-symbols --output ../../nupkgs
-dotnet nuget push src/Auth.DTO/bin/Release/Auth.DTO.[VERSION].nupkg -src https://registry.cfast.fr/repository/gst-nuget/
+dotnet nuget push src/Auth.DTO/bin/Release/Auth.DTO.[VERSION].nupkg
 ```

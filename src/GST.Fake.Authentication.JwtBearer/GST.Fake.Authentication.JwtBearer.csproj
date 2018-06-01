@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -21,13 +21,14 @@ By this way we can fake any authentication we need, without the need to really a
     <RepositoryType>nuget</RepositoryType>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>
