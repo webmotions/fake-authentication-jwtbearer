@@ -1,5 +1,8 @@
 # Fake Authentication Jwt Bearer for ASP.NET Core 2
 
+[![Build status](https://ci.appveyor.com/api/projects/status/csd3288fo1srkqev/branch/master?svg=true)](https://ci.appveyor.com/project/waldo2188/fake-authentication-jwtbearer/branch/master)
+
+
 This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core application.  
 By this way we can fake any authentication we need, without the need to really authenticate a user.  
 This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://github.com/aspnet/Security/tree/dev/src/Microsoft.AspNetCore.Authentication.JwtBearer).
