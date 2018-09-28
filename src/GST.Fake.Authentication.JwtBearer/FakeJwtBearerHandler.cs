@@ -85,7 +85,7 @@ namespace GST.Fake.Authentication.JwtBearer
                     }
                 }
 
-                dynamic tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(token);
+                Dictionary<string, dynamic> tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(token);
 
                 ClaimsIdentity id = new ClaimsIdentity("Identity.Application", "name", "role");
 
@@ -94,7 +94,10 @@ namespace GST.Fake.Authentication.JwtBearer
                     if (td.Key == "sub")
                     {
                         id.AddClaim(new Claim("sub", td.Value.ToString()));
-                        id.AddClaim(new Claim("name", td.Value.ToString()));
+                        if (!tokenDecoded.Any(c => c.Key == "name"))
+                        {
+                            id.AddClaim(new Claim("name", td.Value.ToString()));
+                        }
                     }
                     else
                     {

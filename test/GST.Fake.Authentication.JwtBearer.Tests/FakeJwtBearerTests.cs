@@ -45,6 +45,7 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                         var claims = new[]
                         {
                             new Claim("sub", "Bob le Magnifique"),
+                            new Claim(ClaimTypes.Name, "Bob le Magnifique"),
                             new Claim(ClaimTypes.Email, "bob@contoso.com"),
                             new Claim(ClaimsIdentity.DefaultNameClaimType, "bob")
                         };
@@ -110,6 +111,88 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
             var response = await SendAsync(client, "http://example.com/oauth");
             Assert.Equal(HttpStatusCode.OK, response.Response.StatusCode);
             Assert.Equal("SUperUserName", response.ResponseText);
+        }
+
+        /// <summary>
+        /// Must fix issue https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/issues/2
+        /// </summary>
+        [Fact]
+        public async Task MustFixIssue2Part1()
+        {
+            var server = CreateServer(o =>
+            {
+                o.Events = new JwtBearerEvents()
+                {
+                    OnTokenValidated = context =>
+                    {
+                        Assert.Contains(context.Principal.Claims, a => a.Type == "name" && a.Value == "Kathy Daugherty");
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count() == 1);
+                        Assert.Contains(context.Principal.Claims, a => a.Type == "sub" && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "role").ToList().Count() == 2);
+                        return Task.FromResult<object>(null);
+                    }
+                };
+            });
+
+            var client = server.CreateClient().SetFakeBearerToken(new
+            {
+                sub = "c611495c-ceb7-0af5-5014-1ecbe067363c",
+                name = "Kathy Daugherty",
+                preferred_username = "Kathy Daugherty",
+                email = "Kathy_Daugherty1@gmail.com",
+                ooperator = "true",
+                role = new[]
+                {
+                "admins",
+                "users"
+                }
+            });
+
+            var response = await SendAsync(client, "http://example.com/oauth");
+            Assert.Equal(HttpStatusCode.OK, response.Response.StatusCode);
+            Assert.Equal("c611495c-ceb7-0af5-5014-1ecbe067363c", response.ResponseText);
+        }
+
+        /// <summary>
+        /// Must fix issue https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/issues/2
+        /// </summary>
+        [Fact]
+        public async Task MustFixIssue2Part2()
+        {
+            var server = CreateServer(o =>
+            {
+                o.Events = new JwtBearerEvents()
+                {
+                    OnTokenValidated = context =>
+                    {
+                        Assert.Contains(context.Principal.Claims, a => a.Type == "name" && a.Value == "Earl Becker");
+                        Assert.DoesNotContain(context.Principal.Claims, a => a.Type == "sub" && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == "sub" && a.Value == "Earl Becker");
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count() == 1);
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "role").ToList().Count() == 2);
+                        return Task.FromResult<object>(null);
+                    }
+                };
+            });
+
+            dynamic data = new System.Dynamic.ExpandoObject();
+            data.sub = "801969ed-27f7-c109-af1d-075106644c4b";
+            data.name = "Earl Becker";
+            data.preferred_username = "Earl Becker";
+            data.email = "Earl_Becker@gmail.com";
+            data.ooperator = "true";
+
+            var roles = new[]
+                    {
+                    "admins",
+                    "users"
+                };
+
+            var client = server.CreateClient().SetFakeBearerToken("Earl Becker", roles, (object)data);
+
+            var response = await SendAsync(client, "http://example.com/oauth");
+            Assert.Equal(HttpStatusCode.OK, response.Response.StatusCode);
+            Assert.Equal("Earl Becker", response.ResponseText);
         }
 
         private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
