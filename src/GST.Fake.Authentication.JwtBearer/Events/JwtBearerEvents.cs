@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace GST.Fake.Authentication.JwtBearer.Events
 {
     /// <summary>
-    /// Specifies events which the <see cref="JwtBearerHandler"/> invokes to enable developer control over the authentication process.
+    /// Specifies events which the <see cref="FakeJwtBearerHandler"/> invokes to enable developer control over the authentication process.
     /// </summary>
     public class JwtBearerEvents
     {
@@ -28,12 +28,32 @@ namespace GST.Fake.Authentication.JwtBearer.Events
         /// </summary>
         public Func<JwtBearerChallengeContext, Task> OnChallenge { get; set; } = context => Task.CompletedTask;
 
+        /// <summary>
+        /// Invoked when authentication failed
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public virtual Task AuthenticationFailed(AuthenticationFailedContext context) => OnAuthenticationFailed(context);
 
+        /// <summary>
+        /// Invoked when message is received
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public virtual Task MessageReceived(MessageReceivedContext context) => OnMessageReceived(context);
 
+        /// <summary>
+        /// Invoked for token validation
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public virtual Task TokenValidated(TokenValidatedContext context) => OnTokenValidated(context);
 
+        /// <summary>
+        /// Invoked for challenge
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public virtual Task Challenge(JwtBearerChallengeContext context) => OnChallenge(context);
     }
 }

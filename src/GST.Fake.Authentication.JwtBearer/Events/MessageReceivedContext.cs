@@ -4,8 +4,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace GST.Fake.Authentication.JwtBearer.Events
 {
+    /// <summary>
+    /// Context who hold the token
+    /// </summary>
     public class MessageReceivedContext : ResultContext<FakeJwtBearerOptions>
     {
+        /// <summary>
+        /// MessageReceivedContext
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="scheme"></param>
+        /// <param name="options"></param>
         public MessageReceivedContext(
            HttpContext context,
            AuthenticationScheme scheme,

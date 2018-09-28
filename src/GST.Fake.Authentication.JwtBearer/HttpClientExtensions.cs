@@ -9,7 +9,6 @@ namespace GST.Fake.Authentication.JwtBearer
     /// </summary>
     public static class HttpClientExtensions
     {
-
         /// <summary>
         /// Define a Token with a custom object
         /// </summary>

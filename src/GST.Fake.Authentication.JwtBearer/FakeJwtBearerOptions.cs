@@ -3,7 +3,6 @@ using GST.Fake.Authentication.JwtBearer;
 using GST.Fake.Authentication.JwtBearer.Events;
 using System.Net.Http;
 using System;
-using System.Collections.Generic;
 
 namespace GST.Fake.Builder
 {
@@ -12,7 +11,6 @@ namespace GST.Fake.Builder
     /// </summary>
     public class FakeJwtBearerOptions : AuthenticationSchemeOptions
     {
-
         /// <summary>
         /// Gets or sets if HTTPS is required for the metadata address or authority.
         /// The default is true. This should be disabled only in development environments.

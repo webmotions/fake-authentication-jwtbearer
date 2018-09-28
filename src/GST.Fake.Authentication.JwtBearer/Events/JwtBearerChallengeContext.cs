@@ -2,14 +2,21 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GST.Fake.Authentication.JwtBearer.Events
 {
+    /// <summary>
+    /// JwtBearerChallengeContext
+    /// </summary>
     public class JwtBearerChallengeContext : PropertiesContext<FakeJwtBearerOptions>
     {
+        /// <summary>
+        /// JwtBearerChallengeContext
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="scheme"></param>
+        /// <param name="options"></param>
+        /// <param name="properties"></param>
         public JwtBearerChallengeContext(
             HttpContext context,
             AuthenticationScheme scheme,
@@ -25,14 +32,12 @@ namespace GST.Fake.Authentication.JwtBearer.Events
         /// <summary>
         /// Gets or sets the "error" value returned to the caller as part
         /// of the WWW-Authenticate header. This property may be null when
-        /// <see cref="JwtBearerOptions.IncludeErrorDetails"/> is set to <c>false</c>.
         /// </summary>
         public string Error { get; set; }
 
         /// <summary>
         /// Gets or sets the "error_description" value returned to the caller as part
         /// of the WWW-Authenticate header. This property may be null when
-        /// <see cref="JwtBearerOptions.IncludeErrorDetails"/> is set to <c>false</c>.
         /// </summary>
         public string ErrorDescription { get; set; }
 
