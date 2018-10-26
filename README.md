@@ -51,9 +51,12 @@ public class TestFixture<TStartup> : IDisposable where TStartup : class
       .ConfigureServices(x =>
       {
           // Here we add our new configuration
-          x.AddAuthentication()
-		  .AddFakeJwtBearer()
-          ;
+          x.AddAuthentication(options =>
+           {
+                options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+           	options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+           }).AddFakeJwtBearer();
       });
       // ...
     }
