@@ -18,4 +18,4 @@ deploy:
       secure: QsjsTYGlMBE2oXS8QLMq3TvzcKhW/xatLFuSg+vfoJeaLYxJ1mpfMWs+8chehZbo
     artifact: /GST\.Fake\.Authentication\.JwtBearer.*\.nupkg/
 test_script:
-- dotnet test -f netcoreapp2.1 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/GST.Fake.Authentication.JwtBearer.Tests.csproj
+- dotnet test -f netcoreapp2.2 -c Test ./test/GST.Fake.Authentication.JwtBearer.Tests/GST.Fake.Authentication.JwtBearer.Tests.csproj
