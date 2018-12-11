@@ -127,7 +127,7 @@ I've defined tree methods :
 # Create Nuget Package
 
 ```bash
-dotnet build src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --framework netcoreapp2.1 --force
+dotnet build src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --framework netcoreapp2.2 --force
 dotnet pack src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --include-source --include-symbols --output ../../nupkgs
 dotnet nuget push  src/GST.Fake.Authentication.JwtBearer/bin/Release/GST.Fake.Authentication.JwtBearer.[VERSION].nupkg -s https://api.nuget.org/v3/index.json -k [API-KEY]
 ```
