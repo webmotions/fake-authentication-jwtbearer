@@ -38,13 +38,13 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
         {
             var server = CreateServer(o =>
             {
-                o.Events = new JwtBearerEvents()
+                o.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
                         var claims = new[]
                         {
-                            new Claim("sub", "Bob le Magnifique"),
+                            new Claim(ClaimTypes.NameIdentifier, "Bob le Magnifique"),
                             new Claim(ClaimTypes.Name, "Bob le Magnifique"),
                             new Claim(ClaimTypes.Email, "bob@contoso.com"),
                             new Claim(ClaimsIdentity.DefaultNameClaimType, "bob")
@@ -68,12 +68,12 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
         {
             var server = CreateServer(o =>
             {
-                o.Events = new JwtBearerEvents()
+                o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "role" && a.Value == "Role1");
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "role" && a.Value == "Role2");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.Role && a.Value == "Role1");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.Role && a.Value == "Role2");
                         return Task.FromResult<object>(null);
                     }
                 };
@@ -90,12 +90,12 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
         {
             var server = CreateServer(o =>
             {
-                o.Events = new JwtBearerEvents()
+                o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "role" && a.Value == "Role1");
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "role" && a.Value == "Role2");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.Role && a.Value == "Role1");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.Role && a.Value == "Role2");
                         Assert.Contains(context.Principal.Claims, a => a.Type == "organism" && a.Value == "ACME");
                         Assert.Contains(context.Principal.Claims, a => a.Type == "thing" && a.Value == "more things");
                         return Task.FromResult<object>(null);
@@ -113,22 +113,19 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
             Assert.Equal("SUperUserName", response.ResponseText);
         }
 
-        /// <summary>
-        /// Must fix issue https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/issues/2
-        /// </summary>
         [Fact]
-        public async Task MustFixIssue2Part1()
+        public async Task SettingCustomToken()
         {
             var server = CreateServer(o =>
             {
-                o.Events = new JwtBearerEvents()
+                o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
                         Assert.Contains(context.Principal.Claims, a => a.Type == "name" && a.Value == "Kathy Daugherty");
-                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count() == 1);
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "sub" && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
-                        Assert.True(context.Principal.Claims.Where(c => c.Type == "role").ToList().Count() == 2);
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count == 1);
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.NameIdentifier && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == ClaimTypes.Role).ToList().Count == 2);
                         return Task.FromResult<object>(null);
                     }
                 };
@@ -153,23 +150,20 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
             Assert.Equal("c611495c-ceb7-0af5-5014-1ecbe067363c", response.ResponseText);
         }
 
-        /// <summary>
-        /// Must fix issue https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/issues/2
-        /// </summary>
         [Fact]
-        public async Task MustFixIssue2Part2()
+        public async Task SettingCustomTokenOverridingSubject()
         {
             var server = CreateServer(o =>
             {
-                o.Events = new JwtBearerEvents()
+                o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
                         Assert.Contains(context.Principal.Claims, a => a.Type == "name" && a.Value == "Earl Becker");
-                        Assert.DoesNotContain(context.Principal.Claims, a => a.Type == "sub" && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
-                        Assert.Contains(context.Principal.Claims, a => a.Type == "sub" && a.Value == "Earl Becker");
-                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count() == 1);
-                        Assert.True(context.Principal.Claims.Where(c => c.Type == "role").ToList().Count() == 2);
+                        Assert.DoesNotContain(context.Principal.Claims, a => a.Type == ClaimTypes.NameIdentifier && a.Value == "c611495c-ceb7-0af5-5014-1ecbe067363c");
+                        Assert.Contains(context.Principal.Claims, a => a.Type == ClaimTypes.NameIdentifier && a.Value == "Earl Becker");
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == "name").ToList().Count == 1);
+                        Assert.True(context.Principal.Claims.Where(c => c.Type == ClaimTypes.Role).ToList().Count == 2);
                         return Task.FromResult<object>(null);
                     }
                 };
@@ -215,7 +209,6 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                             {
                                 throw new Exception("Failed to authenticate", result.Failure);
                             }
-                            return;
                         }
                         else if (context.Request.Path == new PathString("/oauth"))
                         {
@@ -229,7 +222,7 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                                 return;
                             }
 
-                            var identifier = context.User.FindFirst("sub");
+                            var identifier = context.User.FindFirst(ClaimTypes.NameIdentifier);
                             if (identifier == null)
                             {
                                 context.Response.StatusCode = 500;
@@ -241,7 +234,7 @@ namespace GST.Fake.Authentication.JwtBearer.Tests
                         else if (context.Request.Path == new PathString("/unauthorized"))
                         {
                             // Simulate Authorization failure 
-                            var result = await context.AuthenticateAsync(FakeJwtBearerDefaults.AuthenticationScheme);
+                            await context.AuthenticateAsync(FakeJwtBearerDefaults.AuthenticationScheme);
                             await context.ChallengeAsync(FakeJwtBearerDefaults.AuthenticationScheme);
                         }
                         else if (context.Request.Path == new PathString("/signIn"))

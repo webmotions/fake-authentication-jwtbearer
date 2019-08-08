@@ -52,8 +52,8 @@ namespace GST.Fake.Builder
         /// </summary>
         public new JwtBearerEvents Events
         {
-            get { return (JwtBearerEvents)base.Events; }
-            set { base.Events = value; }
+            get => (JwtBearerEvents)base.Events;
+            set => base.Events = value;
         }
 
         /// <summary>
@@ -80,5 +80,20 @@ namespace GST.Fake.Builder
         /// from returning an error and an error_description in the WWW-Authenticate header.
         /// </summary>
         public bool IncludeErrorDetails { get; set; } = true;
+
+        /// <summary>
+        /// Gets the <see cref="ISecurityTokenClaimsHandler"/> used to handle the claims.
+        /// </summary>
+        public ISecurityTokenClaimsHandler SecurityTokenClaimHandler { get; } = new FakeJwtBearerClaimsHandler();
+
+        /// <summary>
+        /// Gets or sets the type on the authorization header.
+        /// </summary>
+        public string AuthenticationHeaderType { get; set; } = "FakeBearer";
+
+        /// <summary>
+        /// Gets or set the <see cref="FakeJwtBearerBearerValueType"/> to determine the token object type
+        /// </summary>
+        public FakeJwtBearerBearerValueType BearerValueType { get; set; } = FakeJwtBearerBearerValueType.Json;
     }
 }

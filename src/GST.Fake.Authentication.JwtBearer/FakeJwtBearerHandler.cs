@@ -5,9 +5,7 @@ using GST.Fake.Builder;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections;
 using GST.Fake.Authentication.JwtBearer.Events;
-using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
@@ -47,7 +45,7 @@ namespace GST.Fake.Authentication.JwtBearer
         /// <returns></returns>
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            string token = null;
+            string token;
             try
             {
                 // Give application opportunity to find from a different location, adjust, or reject token
@@ -73,9 +71,9 @@ namespace GST.Fake.Authentication.JwtBearer
                         return AuthenticateResult.NoResult();
                     }
 
-                    if (authorization.StartsWith("FakeBearer ", StringComparison.OrdinalIgnoreCase))
+                    if (authorization.StartsWith($"{Options.AuthenticationHeaderType} ", StringComparison.OrdinalIgnoreCase))
                     {
-                        token = authorization.Substring("FakeBearer ".Length).Trim();
+                        token = authorization.Substring($"{Options.AuthenticationHeaderType} ".Length).Trim();
                     }
 
                     // If no token found, no further work possible
@@ -85,39 +83,19 @@ namespace GST.Fake.Authentication.JwtBearer
                     }
                 }
 
-                Dictionary<string, dynamic> tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(token);
-
-                ClaimsIdentity id = new ClaimsIdentity("Identity.Application", "name", "role");
-
-                foreach (var td in tokenDecoded)
+                Dictionary<string, dynamic> tokenDecoded;
+                if (Options.BearerValueType == FakeJwtBearerBearerValueType.Base64)
                 {
-                    if (td.Key == "sub")
-                    {
-                        id.AddClaim(new Claim("sub", td.Value.ToString()));
-                        if (!tokenDecoded.Any(c => c.Key == "name"))
-                        {
-                            id.AddClaim(new Claim("name", td.Value.ToString()));
-                        }
-                    }
-                    else
-                    {
-                        if (td.Value is string)
-                        {
-                            id.AddClaim(new Claim(td.Key, td.Value));
-                        }
-                        else if (td.Value is IEnumerable)
-                        {
-                            foreach (string subValue in td.Value)
-                            {
-                                id.AddClaim(new Claim(td.Key, subValue));
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Unknown type");
-                        }
-                    }
+                    var tokenFromBase64 = Convert.FromBase64String(token);
+                    tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(Encoding.UTF8.GetString(tokenFromBase64));
                 }
+                else
+                {
+                    tokenDecoded = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(token);
+                }
+
+                var claimsHandler = Options.SecurityTokenClaimHandler;
+                ClaimsIdentity id = claimsHandler.CreateClaimsIdentity(tokenDecoded);
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(id);
 
