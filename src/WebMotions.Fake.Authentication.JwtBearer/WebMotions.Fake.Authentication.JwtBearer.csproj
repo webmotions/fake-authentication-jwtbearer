@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <Version>3.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>WebMotions.Fake.Authentication.JwtBearer</AssemblyName>
+    <PackageId>WebMotions.Fake.Authentication.JwtBearer</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Description>This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core application.
+Using this way we can fake any authentication we need, without the need to really authenticate a user.</Description>
+    <Copyright>Dominique St-Amand</Copyright>
+    <PackageProjectUrl>https://github.com/DOMZE/fake-authentication-jwtbearer</PackageProjectUrl>
+    <License>https://github.com/DOMZE/fake-authentication-jwtbearer/blob/master/LICENSE.md</License>
+    <PackageTags>ASP.Net Core;JWT Bearer;Authentication Test</PackageTags>
+    <Authors>Dominique St-Amand</Authors>
+    <RepositoryType>nuget</RepositoryType>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

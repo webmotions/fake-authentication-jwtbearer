@@ -1,133 +1,95 @@
-# Fake Authentication Jwt Bearer for ASP.NET Core 2
-
-[![Build status](https://ci.appveyor.com/api/projects/status/csd3288fo1srkqev/branch/master?svg=true)](https://ci.appveyor.com/project/waldo2188/fake-authentication-jwtbearer/branch/master)
-
+# Fake Authentication Jwt Bearer for ASP.NET Core 3.1
 
 This code allow to fake a Jwt Bearer and build integration test for ASP.Net Core application.  
 By this way we can fake any authentication we need, without the need to really authenticate a user.  
-This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://github.com/aspnet/Security/tree/dev/src/Microsoft.AspNetCore.Authentication.JwtBearer).
+This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://github.com/aspnet/AspNetCore/tree/master/src/Security/Authentication/JwtBearer) and was forked from [GST.Fake.Authentication.JwtBearer](https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer).
 
- > If You need it for ASP.NET Core 1, check [Tag 1.0.4](https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/tree/1.0.4)
+ > If You need it for ASP.NET Core 1, check [Tag 1.0.4](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/1.0.4)
 
- > If You need it for ASP.NET Core 2.1, check [Tag 2.1.2](https://github.com/GestionSystemesTelecom/fake-authentication-jwtbearer/tree/1.0.4)
+ > If You need it for ASP.NET Core 2.1, check [Tag 2.1.2](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/2.1.2)
+
+ > If you need it for ASP.NET Core 2.2, check [Tag 2.2.0](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/2.2.0)
 
 ## How to install it?
 
-First add this package to your Nuget configuration file : [GST.Fake.Authentication.JwtBearer](https://www.nuget.org/packages/GST.Fake.Authentication.JwtBearer).
-
-Let's imagine we are coding integration tests in the project `MyApp.TestsIntegration`.
-
-This is the tree of the global solution:
-
-```bash
-+--src
-| +---MyApp
-| +---SecondApp
-+---test
-| +---MyApp.Tests
-| +---MyApp.TestsIntegration
-```
-
-My integration test are based on this tutorial [Introduction to integration testing with xUnit and TestServer in ASP.NET Core](http://andrewlock.net/introduction-to-integration-testing-with-xunit-and-testserver-in-asp-net-core/).  
-So I have a `TestFixture.cs` file where I can extend configurations made in the `Startup.cs` file.
-
-In the class `TestFixture.cs` we have to extend the configuration of our Startup.  
-You have to disable you original `AddJwtBearer` in your `Startup.cs`, because the `AddFakeJwtBearer` doesno't overload the original.
-
-```C#
-public class TestFixture<TStartup> : IDisposable where TStartup : class
-{
-    public TestFixture()
-    {
-    // ...
-
-    // We must configure the realpath of the targeted project
-    string appRootPath = Path.GetFullPath(Path.Combine(
-                    PlatformServices.Default.Application.ApplicationBasePath
-                    , "..", "..", "..", "..", "..", "..", "src", baseNamespace));
-
-    var builder = new WebHostBuilder()
-      .UseContentRoot(appRootPath)
-      .UseStartup<TStartup>()
-      .UseEnvironment("Test")
-      .ConfigureServices(x =>
-      {
-          // Here we add our new configuration
-          x.AddAuthentication(options =>
-           {
-                options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-           	options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-           }).AddFakeJwtBearer();
-      });
-      // ...
-    }
-}
-```
+Install the package [WebMotions.Fake.Authentication.JwtBearer](https://www.nuget.org/packages/WebMotions.Fake.Authentication.JwtBearer)
+<br/>**OR**<br/>
+Clone and reference the project Fake.Authentication.JwtBearer under the src folder in your test(s) project(s)
 
 ## How to use it?
 
-Now all the things are tied up, how to faked a user?
+Now all the things are tied up, how to fake a user?
 
-I've defined tree methods :
- - A token with a custom object
- - A token with a Username
- - A token with a Username and some roles
+I've defined two tests methods :
+ - One that verifies a token through an Expando object
+ - One that fails if the token is not set
 
- Let see that in a real world example.
+ All of the below can be found under the samples folder
 
 ```C#
- using GST.Fake.Authentication.JwtBearer;
- using Newtonsoft.Json;
- using Newtonsoft.Json.Linq;
- using System;
- using System.Collections.Generic;
- using System.Net.Http;
- using System.Text;
- using Xunit;
+using System;
+using System.Dynamic;
+using System.Net;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Fake.Authentication.JwtBearer;
+using FluentAssertions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NUnit.Framework;
 
- namespace MyApp.TestsIntegration
- {
-     public class SomeWeirdTest : IClassFixture<TestFixture<MyApp.Startup>>
-     {
-         private TestFixture<MyApp.Startup> fixture;
+namespace Sample.WebApplication.Tests
+{
+    public class WeatherForecastControllerTests
+    {
+        private IHost _host;
 
-         public SomeWeirdTest(TestFixtureMyApp.Startup> _fixture)
-         {
-             fixture = _fixture;
-             // Create a token with a Username and two roles
-             fixture.Client.SetFakeBearerToken("admin", new[] { "ROLE_ADMIN", "ROLE_GENTLEMAN" });
-         }
+        [OneTimeSetUp]
+        public async Task Setup()
+        {
+            _host = await new HostBuilder()
+                .ConfigureWebHost(webBuilder =>
+                {
+                    webBuilder.UseStartup<Sample.WebApplication.Startup>();
+                    webBuilder
+                        .UseTestServer()
+                        .ConfigureTestServices(collection =>
+                        {
+                            collection.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
+                        });
+                })
+                .StartAsync();
+        }
 
-         [Fact]
-         public void testCallPrivateAPI()
-         {
-             // We call a private API with a full authenticated user (admin)
-             var response = fixture.Client.GetAsync("/api/my-account").Result;
-             Assert.True(response.IsSuccessStatusCode);
-         }
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+            _host?.Dispose();
+        }
 
-		 
-         [Fact]
-         public void testCallPrivate2API()
-         {
-		 dynamic data = new System.Dynamic.ExpandoObject();
-            data.organism = "ACME";
-            data.thing = "more things";
-            fixture.Client.SetFakeBearerToken("SUperUserName", new[] { "Role1", "Role2" }, (object)data);
+        [Test]
+        public async Task root_endpoint_should_not_return_authorized_when_jwt_is_set()
+        {
+            dynamic data = new ExpandoObject();
+            data.sub = Guid.NewGuid();
+            data.role = new [] {"sub_role","admin"};
 
-            // We call a private API with a full authenticated user (admin)
-            var response = fixture.Client.GetAsync("/api/my-account").Result;
-            Assert.True(response.IsSuccessStatusCode);
-         }
-     }
- }
-```
+            var httpClient = _host.GetTestServer().CreateClient();
+            httpClient.SetFakeBearerToken((object)data);
 
-# Create Nuget Package
+            var response = await httpClient.GetAsync("/api/weatherforecast");
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
 
-```bash
-dotnet build src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --framework netcoreapp2.2 --force
-dotnet pack src/GST.Fake.Authentication.JwtBearer/GST.Fake.Authentication.JwtBearer.csproj --configuration Release --include-source --include-symbols --output ../../nupkgs
-dotnet nuget push  src/GST.Fake.Authentication.JwtBearer/bin/Release/GST.Fake.Authentication.JwtBearer.[VERSION].nupkg -s https://api.nuget.org/v3/index.json -k [API-KEY]
+        [Test]
+        public async Task root_endpoint_should_return_authorized_when_jwt_is_not_set()
+        {
+            var response = await _host.GetTestServer().CreateClient().GetAsync("/api/weatherforecast");
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+    }
+}
 ```
