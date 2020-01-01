@@ -81,7 +81,7 @@ namespace Sample.WebApplication.Tests
             httpClient.SetFakeBearerToken((object)data);
 
             var response = await httpClient.GetAsync("/api/weatherforecast");
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]

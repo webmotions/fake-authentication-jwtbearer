@@ -19,7 +19,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 {
     internal class FakeJwtBearerHandler : AuthenticationHandler<FakeJwtBearerOptions>
     {
-        public FakeJwtBearerHandler(IOptionsMonitor<FakeJwtBearerOptions> options, ILoggerFactory logger, UrlEncoder encoder, IDataProtectionProvider dataProtection, ISystemClock clock)
+        public FakeJwtBearerHandler(IOptionsMonitor<FakeJwtBearerOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         { }
 
@@ -30,15 +30,11 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// </summary>
         protected new JwtBearerEvents Events
         {
-            get {
-                if(base.Events is JwtBearerEvents)
-                {
-                    return base.Events as JwtBearerEvents;
-                }
-                base.Events = new JwtBearerEvents();
-                return base.Events as JwtBearerEvents; }
-            set { base.Events = value; }
+            get => (JwtBearerEvents)base.Events;
+            set => base.Events = value;
         }
+
+        protected override Task<object> CreateEventsAsync() => Task.FromResult<object>(new JwtBearerEvents());
 
         /// <summary>
         /// Searches the 'Authorization' header for a 'Bearer' token.

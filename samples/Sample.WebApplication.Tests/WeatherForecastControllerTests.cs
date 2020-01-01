@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using WebMotions.Fake.Authentication.JwtBearer;
 
@@ -52,7 +53,7 @@ namespace Sample.WebApplication.Tests
             httpClient.SetFakeBearerToken((object)data);
 
             var response = await httpClient.GetAsync("/api/weatherforecast");
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]
