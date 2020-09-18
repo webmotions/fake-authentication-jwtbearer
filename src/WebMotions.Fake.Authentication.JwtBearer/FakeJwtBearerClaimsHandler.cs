@@ -11,6 +11,20 @@ namespace WebMotions.Fake.Authentication.JwtBearer
     {
         private readonly JwtSecurityTokenHandler _securityTokenHandler = new JwtSecurityTokenHandler();
 
+        /// <summary>
+        /// Gets the options to configure the handler
+        /// </summary>
+        public FakeJwtBearerClaimsHandlerOptions Options { get; }
+
+        /// <summary>
+        /// Construct a FakeJwtBearerClaimsHandler
+        /// </summary>
+        /// <param name="options">The claims handler options</param>
+        public FakeJwtBearerClaimsHandler(FakeJwtBearerClaimsHandlerOptions options)
+        {
+            Options = options;
+        }
+
         /// <inheritdoc />
         public virtual ClaimsIdentity CreateClaimsIdentity(Dictionary<string, JsonElement> token)
         {
@@ -64,7 +78,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                 throw new Exception($"{ClaimTypes.Actor} is not supported");
             }
 
-            Claim claim = new Claim(claimType, value, value.GetType().ToString(), ClaimsIdentity.DefaultIssuer, ClaimsIdentity.DefaultIssuer, identity);
+            Claim claim = new Claim(claimType, value, value.GetType().ToString(), Options.Issuer, Options.OriginalIssuer, identity);
 
             if (wasMapped)
                 claim.Properties[JwtSecurityTokenHandler.ShortClaimTypeProperty] = key;
