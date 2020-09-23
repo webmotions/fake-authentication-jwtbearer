@@ -83,7 +83,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <summary>
         /// Gets the <see cref="ISecurityTokenClaimsHandler"/> used to handle the claims.
         /// </summary>
-        public ISecurityTokenClaimsHandler SecurityTokenClaimHandler { get; } = new FakeJwtBearerClaimsHandler();
+        public ISecurityTokenClaimsHandler SecurityTokenClaimHandler { get; } = new FakeJwtBearerClaimsHandler(new FakeJwtBearerClaimsHandlerOptions());
 
         /// <summary>
         /// Gets or sets the type on the authorization header.

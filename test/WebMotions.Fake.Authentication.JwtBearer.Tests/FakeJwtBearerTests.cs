@@ -84,7 +84,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("SUperUserName");
         }
 
-
         [Fact]
         public async Task SetCustomsClaim()
         {
@@ -187,6 +186,66 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             var response = await SendAsync(client, "http://example.com/oauth");
             response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ResponseText.Should().Be("Earl Becker");
+        }
+
+        [Fact]
+        public async Task SetClaimIssuer()
+        {
+            var server = CreateServer(o =>
+            {
+                o.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        Assert.Contains(context.Principal.Claims, a => a.Issuer == "my_custom_issuer_from_jwt");
+                        Assert.Contains(context.Principal.Claims, a => a.OriginalIssuer == "my_custom_issuer_from_jwt");
+                        return Task.FromResult<object>(null);
+                    }
+                };
+            });
+
+            var client = server.CreateClient().SetFakeBearerToken(new
+            {
+                sub = "c611495c-ceb7-0af5-5014-1ecbe067363c",
+                name = "Kathy Daugherty",
+                preferred_username = "Kathy Daugherty",
+                email = "Kathy_Daugherty1@gmail.com",
+                ooperator = "true",
+                iss = "my_custom_issuer_from_jwt",
+                role = new[]
+                {
+                    "admins",
+                    "users"
+                }
+            });
+
+            var response = await SendAsync(client, "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("c611495c-ceb7-0af5-5014-1ecbe067363c");
+        }
+
+        [Fact]
+        public async Task SetClaimIssuerOverride()
+        {
+            var server = CreateServer(o =>
+            {
+                ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.OverrideIssuer = true;
+                ((FakeJwtBearerClaimsHandler) o.SecurityTokenClaimHandler).Options.Issuer = "my_custom_issuer";
+                ((FakeJwtBearerClaimsHandler) o.SecurityTokenClaimHandler).Options.OriginalIssuer = "my_original_issuer";
+                o.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        Assert.Contains(context.Principal.Claims, a => a.Issuer == "my_custom_issuer");
+                        Assert.Contains(context.Principal.Claims, a => a.OriginalIssuer == "my_original_issuer");
+                        return Task.FromResult<object>(null);
+                    }
+                };
+            });
+
+            var response = await SendAsync(server.CreateClient().SetFakeBearerToken("SuperUserName", new[] { "Role1" }), "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("SuperUserName");
         }
 
         private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
