@@ -1,7 +1,0 @@
-{
-  "profiles": {
-    "GST.Fake.Authentication.JwtBearer.Tests": {
-      "commandName": "Project"
-    }
-  }
-}
