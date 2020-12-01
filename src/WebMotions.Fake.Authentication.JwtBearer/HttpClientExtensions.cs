@@ -11,6 +11,20 @@ namespace System.Net
     public static class HttpClientExtensions
     {
         /// <summary>
+        /// Define a Token without paraments
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public static HttpClient SetFakeBearerToken(this HttpClient client)
+        {
+            client.SetFakeBearerToken(new
+            {
+                sub = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10)
+            });
+            return client;
+        }
+
+        /// <summary>
         /// Define a Token with a custom object
         /// </summary>
         /// <param name="client"></param>

@@ -79,9 +79,18 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                 };
             });
 
-            var response = await SendAsync(server.CreateClient().SetFakeBearerToken("SUperUserName", new[] { "Role1", "Role2" }), "http://example.com/oauth");
+            var response = await SendAsync(server.CreateClient().SetFakeBearerToken("SuperUserName", new[] { "Role1", "Role2" }), "http://example.com/oauth");
             response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ResponseText.Should().Be("SUperUserName");
+            response.ResponseText.Should().Be("SuperUserName");
+        }
+
+        [Fact]
+        public async Task SetTokenFast()
+        {
+            var server = CreateServer();
+
+            var response = await SendAsync(server.CreateClient().SetFakeBearerToken(), "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
