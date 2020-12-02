@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# since it's a netcoreapp it creates automatically a launchSettings
+src/WebMotions.Fake.Authentication.JwtBearer/Properties
