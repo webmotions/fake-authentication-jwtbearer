@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>WebMotions.Fake.Authentication.JwtBearer.Tests</AssemblyName>
     <PackageId>WebMotions.Fake.Authentication.JwtBearer.Tests</PackageId>
@@ -16,7 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.12" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.3" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
