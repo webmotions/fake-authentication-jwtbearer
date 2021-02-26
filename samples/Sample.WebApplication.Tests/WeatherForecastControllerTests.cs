@@ -1,28 +1,24 @@
 using System;
 using System.Dynamic;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NUnit.Framework;
 using WebMotions.Fake.Authentication.JwtBearer;
+using Xunit;
 
 namespace Sample.WebApplication.Tests
 {
-    public class WeatherForecastControllerTests
+    public class WeatherForecastControllerTests : IDisposable
     {
-        private IHost _host;
+        private readonly IHost _host;
 
-        [OneTimeSetUp]
-        public async Task Setup()
+        public WeatherForecastControllerTests()
         {
-            _host = await new HostBuilder()
+            _host = new HostBuilder()
                 .ConfigureWebHost(webBuilder =>
                 {
                     webBuilder.UseStartup<Sample.WebApplication.Startup>();
@@ -32,19 +28,13 @@ namespace Sample.WebApplication.Tests
                         {
                             collection.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
                         });
-                })
-                .StartAsync();
+                }).Build();
         }
 
-        [OneTimeTearDown]
-        public void Cleanup()
-        {
-            _host?.Dispose();
-        }
-
-        [Test]
+        [Fact]
         public async Task root_endpoint_should_not_return_authorized_when_jwt_is_set()
         {
+            await _host.StartAsync();
             dynamic data = new ExpandoObject();
             data.sub = Guid.NewGuid();
             data.role = new [] {"sub_role","admin"};
@@ -56,11 +46,17 @@ namespace Sample.WebApplication.Tests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        [Test]
+        [Fact]
         public async Task root_endpoint_should_return_authorized_when_jwt_is_not_set()
         {
+            await _host.StartAsync();
             var response = await _host.GetTestServer().CreateClient().GetAsync("/api/weatherforecast");
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        public void Dispose()
+        {
+            _host?.Dispose();
         }
     }
 }
