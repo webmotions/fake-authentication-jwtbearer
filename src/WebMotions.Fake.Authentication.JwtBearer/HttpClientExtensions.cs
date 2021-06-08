@@ -33,7 +33,8 @@ namespace System.Net
         {
             client.SetFakeBearerToken(new
             {
-                sub = username
+                sub = username,
+                unique_name = username
             });
 
             return client;
@@ -52,6 +53,7 @@ namespace System.Net
             client.SetFakeBearerToken(new
             {
                 sub = username,
+                unique_name = username,
                 role = roles
             });
 
@@ -69,6 +71,7 @@ namespace System.Net
         public static HttpClient SetFakeBearerToken(this HttpClient client, string username, string[] roles, dynamic claim)
         {
             claim.sub = username;
+            claim.unique_name = username;
             claim.role = roles;
 
             client.SetFakeBearerToken((object) claim);
