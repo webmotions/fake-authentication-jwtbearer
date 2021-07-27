@@ -252,20 +252,21 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
         [Fact]
         public async Task CanSendClaimsViaJwt()
         {
+            var claimType = "client_id";
             var client = CreateServer(options =>
             {
                 options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
-            }).CreateClient();
+            }, claimType: claimType).CreateClient();
             
-            var claims = new Dictionary<string, object> {{"client_id", "TestClientId"}};
+            var claims = new Dictionary<string, object> {{claimType, "TestClientId"}};
             client.SetFakeJwtBearerToken(claims);
             
-            var response = await SendAsync(client, "http://example.com/jwt");
+            var response = await SendAsync(client, "http://example.com/oauth");
             response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ResponseText.Should().Be("TestClientId");
         }
         
-        private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
+        private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null, string claimType = ClaimTypes.NameIdentifier)
         {
             var builder = new WebHostBuilder()
                 .Configure(app =>
@@ -298,7 +299,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                                 return;
                             }
 
-                            var identifier = context.User.FindFirst(ClaimTypes.NameIdentifier);
+                            var identifier = context.User.FindFirst(claimType);
                             if (identifier == null)
                             {
                                 context.Response.StatusCode = 500;
@@ -320,21 +321,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                         else if (context.Request.Path == new PathString("/signOut"))
                         {
                             await Assert.ThrowsAsync<InvalidOperationException>(() => context.SignOutAsync(FakeJwtBearerDefaults.AuthenticationScheme));
-                        }else if (context.Request.Path == new PathString("/jwt"))
-                        {
-                            if (context.User == null ||
-                                context.User.Identity == null ||
-                                !context.User.Identity.IsAuthenticated)
-                            {
-                                context.Response.StatusCode = 401;
-                                // REVIEW: no more automatic challenge
-                                await context.ChallengeAsync(FakeJwtBearerDefaults.AuthenticationScheme);
-                                return;
-                            }
-
-                            var clientId = context.User.Claims.FirstOrDefault(c => c.Type == "client_id").Value;
-                            
-                            await context.Response.WriteAsync(clientId);
                         }
                         else
                         {
