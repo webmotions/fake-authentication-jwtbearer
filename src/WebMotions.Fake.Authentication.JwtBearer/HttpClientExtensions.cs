@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using WebMotions.Fake.Authentication.JwtBearer;
 
 // ReSharper disable once CheckNamespace
 namespace System.Net
@@ -22,7 +23,7 @@ namespace System.Net
         /// <returns></returns>
         public static HttpClient SetFakeBearerToken(this HttpClient client, object token)
         {
-            client.SetToken("FakeBearer", JsonConvert.SerializeObject(token));
+            client.SetToken(FakeJwtBearerDefaults.AuthenticationScheme, JsonConvert.SerializeObject(token));
 
             return client;
         }
@@ -101,7 +102,7 @@ namespace System.Net
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwt = tokenHandler.WriteToken(token);
-            return client.SetToken("FakeBearer", jwt);
+            return client.SetToken(FakeJwtBearerDefaults.AuthenticationScheme, jwt);
         }
 
         /// <summary>
