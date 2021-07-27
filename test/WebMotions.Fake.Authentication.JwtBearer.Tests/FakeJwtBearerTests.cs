@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -248,6 +249,18 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("SuperUserName");
         }
 
+        [Fact]
+        public async Task CanSendClaimsViaJwt()
+        {
+            var client = CreateJwtServer().CreateClient();
+            var claims = new Dictionary<string, object> {{"client_id", "TestClientId"}};
+            client.SetFakeJwtBearerToken(claims);
+            
+            var response = await SendAsync(client, "http://example.com/jwt");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("TestClientId");
+        }
+        
         private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
         {
             var builder = new WebHostBuilder()
@@ -311,6 +324,50 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                     });
                 })
                 .ConfigureServices(services => services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(options));
+
+            return new TestServer(builder);
+        }
+        
+        private static TestServer CreateJwtServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
+        {
+            var builder = new WebHostBuilder()
+                .Configure(app =>
+                {
+                    if (handlerBeforeAuth != null)
+                    {
+                        app.Use(handlerBeforeAuth);
+                    }
+
+                    app.UseAuthentication();
+                    app.Use(async (context, next) =>
+                    {
+                        if (context.Request.Path == new PathString("/jwt"))
+                        {
+                            if (context.User == null ||
+                                context.User.Identity == null ||
+                                !context.User.Identity.IsAuthenticated)
+                            {
+                                context.Response.StatusCode = 401;
+                                // REVIEW: no more automatic challenge
+                                await context.ChallengeAsync(FakeJwtBearerDefaults.AuthenticationScheme);
+                                return;
+                            }
+
+                            var clientId = context.User.Claims.FirstOrDefault(c => c.Type == "client_id").Value;
+                            
+                            await context.Response.WriteAsync(clientId);
+                        }
+                        else
+                        {
+                            await next();
+                        }
+                    });
+                })
+                .ConfigureServices(services => services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(
+                    options =>
+                    {
+                        options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+                    }));
 
             return new TestServer(builder);
         }
