@@ -252,7 +252,11 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
         [Fact]
         public async Task CanSendClaimsViaJwt()
         {
-            var client = CreateJwtServer().CreateClient();
+            var client = CreateServer(options =>
+            {
+                options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+            }).CreateClient();
+            
             var claims = new Dictionary<string, object> {{"client_id", "TestClientId"}};
             client.SetFakeJwtBearerToken(claims);
             
@@ -316,32 +320,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                         else if (context.Request.Path == new PathString("/signOut"))
                         {
                             await Assert.ThrowsAsync<InvalidOperationException>(() => context.SignOutAsync(FakeJwtBearerDefaults.AuthenticationScheme));
-                        }
-                        else
-                        {
-                            await next();
-                        }
-                    });
-                })
-                .ConfigureServices(services => services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(options));
-
-            return new TestServer(builder);
-        }
-        
-        private static TestServer CreateJwtServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
-        {
-            var builder = new WebHostBuilder()
-                .Configure(app =>
-                {
-                    if (handlerBeforeAuth != null)
-                    {
-                        app.Use(handlerBeforeAuth);
-                    }
-
-                    app.UseAuthentication();
-                    app.Use(async (context, next) =>
-                    {
-                        if (context.Request.Path == new PathString("/jwt"))
+                        }else if (context.Request.Path == new PathString("/jwt"))
                         {
                             if (context.User == null ||
                                 context.User.Identity == null ||
@@ -363,15 +342,11 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                         }
                     });
                 })
-                .ConfigureServices(services => services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(
-                    options =>
-                    {
-                        options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
-                    }));
+                .ConfigureServices(services => services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer(options));
 
             return new TestServer(builder);
         }
-
+        
         private static async Task<Transaction> SendAsync(HttpClient client, string uri, string authorizationHeader = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
