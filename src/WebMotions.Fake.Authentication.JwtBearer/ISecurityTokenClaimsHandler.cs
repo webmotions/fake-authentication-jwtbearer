@@ -15,5 +15,12 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <param name="token">The token data</param>
         /// <returns>A <see cref="ClaimsIdentity"/></returns>
         ClaimsIdentity CreateClaimsIdentity(Dictionary<string, JsonElement> token);
+        
+        /// <summary>
+        /// Creates a claims identity from a JWT token
+        /// </summary>
+        /// <param name="jwtToken">The JWT token</param>
+        /// <returns>A <see cref="ClaimsIdentity"/></returns>
+        ClaimsIdentity CreateClaimsIdentity(string jwtToken);
     }
 }

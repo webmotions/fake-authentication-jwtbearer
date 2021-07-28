@@ -81,20 +81,26 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                 }
 
                 Dictionary<string, JsonElement> tokenDecoded;
-                if (Options.BearerValueType == FakeJwtBearerBearerValueType.Base64)
-                {
-                    var tokenFromBase64 = Convert.FromBase64String(token);
-                    tokenDecoded = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Encoding.UTF8.GetString(tokenFromBase64));
-                }
-                else
-                {
-                    tokenDecoded = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(token);
-                }
-
-                Logger.TokenValidationSucceeded();
-
+                ClaimsIdentity id;
                 var claimsHandler = Options.SecurityTokenClaimHandler;
-                ClaimsIdentity id = claimsHandler.CreateClaimsIdentity(tokenDecoded);
+
+                switch (Options.BearerValueType)
+                {
+                    case FakeJwtBearerBearerValueType.Base64:
+                        var tokenFromBase64 = Convert.FromBase64String(token);
+                        tokenDecoded = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Encoding.UTF8.GetString(tokenFromBase64));
+                        id = claimsHandler.CreateClaimsIdentity(tokenDecoded);
+                        break;
+                    case FakeJwtBearerBearerValueType.Jwt:
+                        id = claimsHandler.CreateClaimsIdentity(token);
+                        break;
+                    default:
+                        tokenDecoded = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(token);
+                        id = claimsHandler.CreateClaimsIdentity(tokenDecoded);
+                        break;
+                }
+                
+                Logger.TokenValidationSucceeded();
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(id);
 

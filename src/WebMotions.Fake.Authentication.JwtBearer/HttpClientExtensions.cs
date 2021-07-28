@@ -1,6 +1,11 @@
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using WebMotions.Fake.Authentication.JwtBearer;
 
 // ReSharper disable once CheckNamespace
 namespace System.Net
@@ -18,7 +23,7 @@ namespace System.Net
         /// <returns></returns>
         public static HttpClient SetFakeBearerToken(this HttpClient client, object token)
         {
-            client.SetToken("FakeBearer", JsonConvert.SerializeObject(token));
+            client.SetToken(FakeJwtBearerDefaults.AuthenticationScheme, JsonConvert.SerializeObject(token));
 
             return client;
         }
@@ -77,6 +82,27 @@ namespace System.Net
             client.SetFakeBearerToken((object) claim);
 
             return client;
+        }
+        
+        /// <summary>
+        /// Set a fake bearer token in form of a JWT. 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="claims"></param>
+        /// <returns></returns>
+        public static HttpClient SetFakeJwtBearerToken(this HttpClient client, Dictionary<string, object> claims)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(),
+                Expires = DateTime.UtcNow.AddDays(7),
+                Claims = claims
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwt = tokenHandler.WriteToken(token);
+            return client.SetToken(FakeJwtBearerDefaults.AuthenticationScheme, jwt);
         }
 
         /// <summary>

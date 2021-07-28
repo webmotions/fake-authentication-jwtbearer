@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -248,7 +249,24 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("SuperUserName");
         }
 
-        private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null)
+        [Fact]
+        public async Task CanSendClaimsViaJwt()
+        {
+            var claimType = "client_id";
+            var client = CreateServer(options =>
+            {
+                options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+            }, claimType: claimType).CreateClient();
+            
+            var claims = new Dictionary<string, object> {{claimType, "TestClientId"}};
+            client.SetFakeJwtBearerToken(claims);
+            
+            var response = await SendAsync(client, "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("TestClientId");
+        }
+        
+        private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null, string claimType = ClaimTypes.NameIdentifier)
         {
             var builder = new WebHostBuilder()
                 .Configure(app =>
@@ -281,7 +299,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                                 return;
                             }
 
-                            var identifier = context.User.FindFirst(ClaimTypes.NameIdentifier);
+                            var identifier = context.User.FindFirst(claimType);
                             if (identifier == null)
                             {
                                 context.Response.StatusCode = 500;
@@ -314,7 +332,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
 
             return new TestServer(builder);
         }
-
+        
         private static async Task<Transaction> SendAsync(HttpClient client, string uri, string authorizationHeader = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);

@@ -12,6 +12,10 @@
         /// <summary>
         /// Token in Base64 Format
         /// </summary>
-        Base64
+        Base64,
+        /// <summary>
+        /// Token is a JWT
+        /// </summary>
+        Jwt
     }
 }

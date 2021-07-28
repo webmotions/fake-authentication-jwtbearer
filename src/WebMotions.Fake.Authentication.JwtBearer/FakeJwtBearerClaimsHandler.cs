@@ -84,6 +84,25 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 
             return identity;
         }
+        
+        /// <summary>
+        /// Creates a claims identity from a JWT token
+        /// </summary>
+        /// <param name="jwtToken">The JWT token</param>
+        /// <returns>A <see cref="ClaimsIdentity"/></returns>
+        public virtual ClaimsIdentity CreateClaimsIdentity(string jwtToken)
+        {
+            var identity = new ClaimsIdentity("FakeJwtBearer");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            if (tokenHandler.ReadToken(jwtToken) is not JwtSecurityToken securityToken) return identity;
+            foreach (var claim in securityToken.Claims)
+            {
+                identity.AddClaim(claim);
+            }
+
+            return identity;
+        }
+        
 
         private Claim CreateClaim(string key, string value, ClaimsIdentity identity, string issuer, string originalIssuer)
         {
