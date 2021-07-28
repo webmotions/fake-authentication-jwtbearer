@@ -19,13 +19,17 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 {
     internal class FakeJwtBearerHandler : AuthenticationHandler<FakeJwtBearerOptions>
     {
-        public FakeJwtBearerHandler(IOptionsMonitor<FakeJwtBearerOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+        public FakeJwtBearerHandler(
+            IOptionsMonitor<FakeJwtBearerOptions> options,
+            ILoggerFactory logger,
+            UrlEncoder encoder,
+            ISystemClock clock)
             : base(options, logger, encoder, clock)
-        { }
-
+        {
+        }
 
         /// <summary>
-        /// The handler calls methods on the events which give the application control at certain points where processing is occurring. 
+        /// The handler calls methods on the events which give the application control at certain points where processing is occurring.
         /// If it is not provided a default instance is supplied which does nothing when the methods are called.
         /// </summary>
         protected new JwtBearerEvents Events
@@ -99,7 +103,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                         id = claimsHandler.CreateClaimsIdentity(tokenDecoded);
                         break;
                 }
-                
+
                 Logger.TokenValidationSucceeded();
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(id);
@@ -182,12 +186,14 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                     // Only add a comma after the first param, if any
                     builder.Append(',');
                 }
+
                 if (!string.IsNullOrEmpty(eventContext.Error))
                 {
                     builder.Append(" error=\"");
                     builder.Append(eventContext.Error);
                     builder.Append("\"");
                 }
+
                 if (!string.IsNullOrEmpty(eventContext.ErrorDescription))
                 {
                     if (!string.IsNullOrEmpty(eventContext.Error))
@@ -199,6 +205,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                     builder.Append(eventContext.ErrorDescription);
                     builder.Append('\"');
                 }
+
                 if (!string.IsNullOrEmpty(eventContext.ErrorUri))
                 {
                     if (!string.IsNullOrEmpty(eventContext.Error) ||

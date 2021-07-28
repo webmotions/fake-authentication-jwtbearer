@@ -9,7 +9,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Events
     public class TokenValidatedContext : ResultContext<FakeJwtBearerOptions>
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="context"></param>
         /// <param name="scheme"></param>
@@ -18,8 +17,8 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Events
             HttpContext context,
             AuthenticationScheme scheme,
             FakeJwtBearerOptions options)
-            : base(context, scheme, options) { }
-
-        //public SecurityToken SecurityToken { get; set; }
+            : base(context, scheme, options)
+        {
+        }
     }
 }

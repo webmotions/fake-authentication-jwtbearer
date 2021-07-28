@@ -18,6 +18,8 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Events
             HttpContext context,
             AuthenticationScheme scheme,
             FakeJwtBearerOptions options)
-            : base(context, scheme, options) { }
+            : base(context, scheme, options)
+        {
+        }
     }
 }

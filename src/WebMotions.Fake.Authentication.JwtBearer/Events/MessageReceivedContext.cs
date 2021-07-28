@@ -15,10 +15,12 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Events
         /// <param name="scheme"></param>
         /// <param name="options"></param>
         public MessageReceivedContext(
-           HttpContext context,
-           AuthenticationScheme scheme,
-           FakeJwtBearerOptions options)
-           : base(context, scheme, options) { }
+            HttpContext context,
+            AuthenticationScheme scheme,
+            FakeJwtBearerOptions options)
+            : base(context, scheme, options)
+        {
+        }
 
         /// <summary>
         /// Bearer Token. This will give the application an opportunity to retrieve a token from an alternative location.

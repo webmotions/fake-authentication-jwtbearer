@@ -177,10 +177,10 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             data.ooperator = "true";
 
             var roles = new[]
-                    {
-                    "admins",
-                    "users"
-                };
+            {
+                "admins",
+                "users"
+            };
 
             var client = server.CreateClient().SetFakeBearerToken("Earl Becker", roles, (object)data);
 
@@ -231,8 +231,8 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             var server = CreateServer(o =>
             {
                 ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.OverrideIssuer = true;
-                ((FakeJwtBearerClaimsHandler) o.SecurityTokenClaimHandler).Options.Issuer = "my_custom_issuer";
-                ((FakeJwtBearerClaimsHandler) o.SecurityTokenClaimHandler).Options.OriginalIssuer = "my_original_issuer";
+                ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.Issuer = "my_custom_issuer";
+                ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.OriginalIssuer = "my_original_issuer";
                 o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
@@ -253,19 +253,21 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
         public async Task CanSendClaimsViaJwt()
         {
             var claimType = "client_id";
-            var client = CreateServer(options =>
-            {
-                options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
-            }, claimType: claimType).CreateClient();
-            
-            var claims = new Dictionary<string, object> {{claimType, "TestClientId"}};
+            var client = CreateServer(
+                options =>
+                {
+                    options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+                },
+                claimType: claimType).CreateClient();
+
+            var claims = new Dictionary<string, object> { { claimType, "TestClientId" } };
             client.SetFakeJwtBearerToken(claims);
-            
+
             var response = await SendAsync(client, "http://example.com/oauth");
             response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ResponseText.Should().Be("TestClientId");
         }
-        
+
         private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null, string claimType = ClaimTypes.NameIdentifier)
         {
             var builder = new WebHostBuilder()
@@ -294,6 +296,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                                 !context.User.Identity.IsAuthenticated)
                             {
                                 context.Response.StatusCode = 401;
+
                                 // REVIEW: no more automatic challenge
                                 await context.ChallengeAsync(FakeJwtBearerDefaults.AuthenticationScheme);
                                 return;
@@ -310,7 +313,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
                         }
                         else if (context.Request.Path == new PathString("/unauthorized"))
                         {
-                            // Simulate Authorization failure 
+                            // Simulate Authorization failure
                             await context.AuthenticateAsync(FakeJwtBearerDefaults.AuthenticationScheme);
                             await context.ChallengeAsync(FakeJwtBearerDefaults.AuthenticationScheme);
                         }
@@ -332,7 +335,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
 
             return new TestServer(builder);
         }
-        
+
         private static async Task<Transaction> SendAsync(HttpClient client, string uri, string authorizationHeader = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -345,7 +348,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             {
                 Request = request,
                 Response = await client.SendAsync(request),
-                //Response = await server.CreateClient().SendAsync(request),
             };
 
             transaction.ResponseText = await transaction.Response.Content.ReadAsStringAsync();

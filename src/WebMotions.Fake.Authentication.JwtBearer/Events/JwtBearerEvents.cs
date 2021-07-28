@@ -14,7 +14,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Events
         public Func<AuthenticationFailedContext, Task> OnAuthenticationFailed { get; set; } = context => Task.CompletedTask;
 
         /// <summary>
-        /// Invoked if Authorization fails and results in a Forbidden response  
+        /// Invoked if Authorization fails and results in a Forbidden response
         /// </summary>
         public Func<ForbiddenContext, Task> OnForbidden { get; set; } = context => Task.CompletedTask;
 

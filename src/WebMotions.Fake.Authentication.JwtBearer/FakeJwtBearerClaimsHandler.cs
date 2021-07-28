@@ -55,7 +55,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 
             foreach (var prop in token)
             {
-
                 Claim claim;
                 if (prop.Value.ValueKind == JsonValueKind.String)
                 {
@@ -84,7 +83,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 
             return identity;
         }
-        
+
         /// <summary>
         /// Creates a claims identity from a JWT token
         /// </summary>
@@ -94,7 +93,11 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         {
             var identity = new ClaimsIdentity("FakeJwtBearer");
             var tokenHandler = new JwtSecurityTokenHandler();
-            if (tokenHandler.ReadToken(jwtToken) is not JwtSecurityToken securityToken) return identity;
+            if (tokenHandler.ReadToken(jwtToken) is not JwtSecurityToken securityToken)
+            {
+                return identity;
+            }
+
             foreach (var claim in securityToken.Claims)
             {
                 identity.AddClaim(claim);
@@ -102,7 +105,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer
 
             return identity;
         }
-        
 
         private Claim CreateClaim(string key, string value, ClaimsIdentity identity, string issuer, string originalIssuer)
         {

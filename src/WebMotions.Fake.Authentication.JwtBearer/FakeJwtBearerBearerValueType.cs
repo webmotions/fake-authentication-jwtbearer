@@ -9,10 +9,12 @@
         /// Token in JSON format
         /// </summary>
         Json,
+
         /// <summary>
         /// Token in Base64 Format
         /// </summary>
         Base64,
+
         /// <summary>
         /// Token is a JWT
         /// </summary>

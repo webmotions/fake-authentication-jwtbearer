@@ -8,11 +8,13 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests.Tools
     public class Transaction
     {
         public HttpRequestMessage Request { get; set; }
+
         public HttpResponseMessage Response { get; set; }
 
         public IList<string> SetCookie { get; set; }
 
         public string ResponseText { get; set; }
+
         public XElement ResponseElement { get; set; }
 
         public string AuthenticationCookieValue
@@ -47,6 +49,5 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests.Tools
                                        .SingleOrDefault(elt => elt.Attribute("name").Value == name);
             return claim?.Attribute("value").Value;
         }
-
     }
 }

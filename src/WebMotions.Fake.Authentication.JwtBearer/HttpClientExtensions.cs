@@ -54,7 +54,6 @@ namespace System.Net
         /// <returns></returns>
         public static HttpClient SetFakeBearerToken(this HttpClient client, string username, string[] roles)
         {
-
             client.SetFakeBearerToken(new
             {
                 sub = username,
@@ -79,13 +78,13 @@ namespace System.Net
             claim.unique_name = username;
             claim.role = roles;
 
-            client.SetFakeBearerToken((object) claim);
+            client.SetFakeBearerToken((object)claim);
 
             return client;
         }
-        
+
         /// <summary>
-        /// Set a fake bearer token in form of a JWT. 
+        /// Set a fake bearer token in form of a JWT.
         /// </summary>
         /// <param name="client"></param>
         /// <param name="claims"></param>

@@ -14,7 +14,6 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <param name="options">The options instance to configure.</param>
         public void PostConfigure(string name, FakeJwtBearerOptions options)
         {
-
         }
     }
 }
