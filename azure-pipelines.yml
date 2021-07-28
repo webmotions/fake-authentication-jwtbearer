@@ -29,6 +29,14 @@ stages:
     - checkout: self
 
     - task: DotNetCoreCLI@2
+      name: restoreVulnerabilitiesSolution
+      displayName: 'Restore Vulnerabilitity solution'
+      inputs:
+        command: restore
+        projects: $(Solution)
+        verbosityRestore: normal
+
+    - task: DotNetCoreCLI@2
       name: checkVulnerabilities
       displayName: 'Vulnerabilities check'
       inputs:
