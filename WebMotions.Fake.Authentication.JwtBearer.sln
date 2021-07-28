@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{77DE8FBC-95B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D94BD66A-E715-44D0-AE3C-25D85E81529D}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -18,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMotions.Fake.Authenticat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A3F34A9C-7F17-4E30-83A2-A29ED1CE64D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.WebApplication", "samples\Sample.WebApplication\Sample.WebApplication.csproj", "{84C5EA2B-36FD-43E5-A866-A148CBFDC5B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.WebApplication", "samples\Sample.WebApplication\Sample.WebApplication.csproj", "{84C5EA2B-36FD-43E5-A866-A148CBFDC5B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.WebApplication.Tests", "samples\Sample.WebApplication.Tests\Sample.WebApplication.Tests.csproj", "{3592DC90-1CC3-4520-B5D8-304A062A2479}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.WebApplication.Tests", "samples\Sample.WebApplication.Tests\Sample.WebApplication.Tests.csproj", "{3592DC90-1CC3-4520-B5D8-304A062A2479}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

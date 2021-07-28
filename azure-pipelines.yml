@@ -1,0 +1,67 @@
+pool:
+  name: Azure Pipelines
+  vmImage: 'ubuntu-latest'
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+  drafts: false
+
+variables:
+- name: BuildPlatform
+  value: 'Any CPU'
+- name: Solution
+  value: 'WebMotions.Fake.Authentication.JwtBearer.sln'
+- name: BuildConfiguration
+  value: 'Release'
+- name: dropName
+  value: 'drop'
+
+stages:
+- stage: buildStage
+  displayName: 'Build'
+  jobs:
+  - job: buildJob
+    displayName: 'Build'
+    steps:
+    - checkout: self
+
+    - task: DotNetCoreCLI@2
+      name: checkVulnerabilities
+      displayName: 'Vulnerabilities check'
+      inputs:
+        command: custom
+        custom: list
+        arguments: '$(Solution) package --vulnerable --include-transitive'
+
+    - task: DotNetCoreCLI@2
+      displayName: Build solution
+      inputs:
+        projects: $(Solution)
+        arguments: --configuration $(BuildConfiguration)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Test'
+      inputs:
+        command: test
+        projects: 'test/**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -l "console;verbosity=detailed"'
+        publishTestResults: true
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: src/WebMotions.Fake.Authentication.JwtBearer/WebMotions.Fake.Authentication.JwtBearer.csproj
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifact'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        parallel: true
+        artifactName: $(dropName)
