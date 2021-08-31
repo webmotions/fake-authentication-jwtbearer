@@ -58,7 +58,7 @@ namespace System.Net
             {
                 sub = username,
                 unique_name = username,
-                role = roles
+                roles = roles
             });
 
             return client;
@@ -76,7 +76,7 @@ namespace System.Net
         {
             claim.sub = username;
             claim.unique_name = username;
-            claim.role = roles;
+            claim.roles = roles;
 
             client.SetFakeBearerToken((object)claim);
 
