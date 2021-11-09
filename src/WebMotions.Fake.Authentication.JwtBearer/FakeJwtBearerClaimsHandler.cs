@@ -9,7 +9,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
     /// <inheritdoc />
     public class FakeJwtBearerClaimsHandler : ISecurityTokenClaimsHandler
     {
-        private readonly JwtSecurityTokenHandler _securityTokenHandler = new JwtSecurityTokenHandler();
+        private readonly JwtSecurityTokenHandler _securityTokenHandler = new();
 
         /// <summary>
         /// Gets the options to configure the handler

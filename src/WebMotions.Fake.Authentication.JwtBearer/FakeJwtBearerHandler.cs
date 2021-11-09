@@ -7,7 +7,6 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -132,6 +131,8 @@ namespace WebMotions.Fake.Authentication.JwtBearer
             }
             catch (Exception ex)
             {
+                Logger.ErrorProcessingMessage(ex);
+
                 var authenticationFailedContext = new AuthenticationFailedContext(Context, Scheme, Options)
                 {
                     Exception = ex
@@ -152,7 +153,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
             var authResult = await HandleAuthenticateOnceSafeAsync();
             var eventContext = new JwtBearerChallengeContext(Context, Scheme, Options, properties)
             {
-                AuthenticateFailure = authResult?.Failure
+                AuthenticateFailure = authResult.Failure
             };
 
             // Avoid returning error=invalid_token if the error is not caused by an authentication failure (e.g missing token).
