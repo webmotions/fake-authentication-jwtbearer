@@ -21,7 +21,7 @@ namespace Sample.WebApplication.Tests
             _host = new HostBuilder()
                 .ConfigureWebHost(webBuilder =>
                 {
-                    webBuilder.UseStartup<Sample.WebApplication.Startup>();
+                    webBuilder.UseStartup<Startup>();
                     webBuilder
                         .UseTestServer()
                         .ConfigureTestServices(collection =>
