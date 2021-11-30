@@ -27,6 +27,12 @@ stages:
     displayName: 'Build'
     steps:
     - checkout: self
+    
+    - task: UseDotNet@2 
+      displayName: '.NET Core 6.0.x'
+      inputs:
+        version: '6.0.x'
+        packageType: sdk    
 
     - task: DotNetCoreCLI@2
       name: restoreVulnerabilitiesSolution
@@ -36,13 +42,29 @@ stages:
         projects: $(Solution)
         verbosityRestore: normal
 
-    - task: DotNetCoreCLI@2
+    - task: PowerShell@2
       name: checkVulnerabilities
       displayName: 'Vulnerabilities check'
       inputs:
-        command: custom
-        custom: list
-        arguments: '$(Solution) package --vulnerable --include-transitive'
+        pwsh: true
+        targetType: inline
+        script: |
+          $output = dotnet list "$(Solution)" package --vulnerable
+          Write-Output $output
+          $errors = $output | Select-String '>'
+          if ($errors.Count -gt 0)
+          {
+            foreach ($err in $errors)
+            {
+              Write-Host "##vso[task.logissue type=error]Reference to vulnerable NuGet package $err"
+            }
+            exit 1
+          }
+          else
+          {
+            Write-Host "No vulnerable NuGet packages"
+            exit 0
+          }
 
     - task: DotNetCoreCLI@2
       displayName: Build solution
