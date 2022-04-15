@@ -26,6 +26,8 @@ namespace Sample.WebApplication.Tests
                         .UseTestServer()
                         .ConfigureTestServices(collection =>
                         {
+                        
+                            collection.AddAuthenticationCore(x => x.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme);
                             collection.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
                         });
                 }).Build();
