@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -58,7 +59,9 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                 Claim claim;
                 if (prop.Value.ValueKind == JsonValueKind.String)
                 {
-                    claim = CreateClaim(prop.Key, prop.Value.GetString(), identity, issuer, originalIssuer);
+                    claim = Options.MapInboundClaims
+                        ? CreateClaim(prop.Key, prop.Value.GetString(), identity, issuer, originalIssuer)
+                        : new Claim(prop.Key, prop.Value.GetString(), issuer, originalIssuer);
                     if (claim != null)
                     {
                         identity.AddClaim(claim);
@@ -68,7 +71,9 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                 {
                     foreach (var subValue in prop.Value.EnumerateArray())
                     {
-                        claim = CreateClaim(prop.Key, subValue.GetString(), identity, issuer, originalIssuer);
+                        claim = Options.MapInboundClaims
+                            ? CreateClaim(prop.Key, subValue.GetString(), identity, issuer, originalIssuer)
+                            : new Claim(prop.Key, subValue.GetString(), issuer, originalIssuer);
                         if (claim != null)
                         {
                             identity.AddClaim(claim);
@@ -91,16 +96,41 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <returns>A <see cref="ClaimsIdentity"/></returns>
         public virtual ClaimsIdentity CreateClaimsIdentity(string jwtToken)
         {
-            var identity = new ClaimsIdentity("FakeJwtBearer");
+            ClaimsIdentity identity = new ClaimsIdentity("FakeJwtBearer");
             var tokenHandler = new JwtSecurityTokenHandler();
-            if (tokenHandler.ReadToken(jwtToken) is not JwtSecurityToken securityToken)
+            var securityToken = tokenHandler.ReadJwtToken(jwtToken);
+
+            string issuer;
+            string originalIssuer;
+            if (!Options.OverrideIssuer)
             {
-                return identity;
+                var issuerClaim = securityToken.Claims.FirstOrDefault(c => c.Type == "iss");
+                if (issuerClaim != null)
+                {
+                    issuer = originalIssuer = issuerClaim.Value;
+                }
+                else
+                {
+                    issuer = Options.Issuer;
+                    originalIssuer = Options.OriginalIssuer;
+                }
+            }
+            else
+            {
+                issuer = Options.Issuer;
+                originalIssuer = Options.OriginalIssuer;
             }
 
             foreach (var claim in securityToken.Claims)
             {
-                identity.AddClaim(claim);
+                if (Options.MapInboundClaims)
+                {
+                    identity.AddClaim(CreateClaim(claim.Type, claim.Value, identity, issuer, originalIssuer));
+                }
+                else
+                {
+                    identity.AddClaim(Options.OverrideIssuer ? new Claim(claim.Type, claim.Value, claim.ValueType, issuer, originalIssuer) : claim);
+                }
             }
 
             return identity;
@@ -111,7 +141,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
             if (_securityTokenHandler.InboundClaimFilter.Contains(key))
                 return null;
 
-            bool wasMapped = true;
+            var wasMapped = true;
             if (!_securityTokenHandler.InboundClaimTypeMap.TryGetValue(key, out var claimType))
             {
                 claimType = key;
@@ -123,10 +153,12 @@ namespace WebMotions.Fake.Authentication.JwtBearer
                 throw new Exception($"{ClaimTypes.Actor} is not supported");
             }
 
-            Claim claim = new Claim(claimType, value, value.GetType().ToString(), issuer, originalIssuer, identity);
+            var claim = new Claim(claimType, value, value.GetType().ToString(), issuer, originalIssuer, identity);
 
             if (wasMapped)
+            {
                 claim.Properties[JwtSecurityTokenHandler.ShortClaimTypeProperty] = key;
+            }
 
             return claim;
         }

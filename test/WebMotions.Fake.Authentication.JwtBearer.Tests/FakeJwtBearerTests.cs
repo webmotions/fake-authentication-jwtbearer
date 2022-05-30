@@ -249,6 +249,43 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("SuperUserName");
         }
 
+        [Theory]
+        [InlineData(ClaimTypes.NameIdentifier, true)]
+        [InlineData("sub", false)]
+        public async Task SetClaimIssuerOverrideUsingJwt(string claimType, bool mapInboundClaims)
+        {
+            var server = CreateServer(
+                o =>
+                {
+                    o.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.MapInboundClaims = mapInboundClaims;
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.OverrideIssuer = true;
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.Issuer = "my_custom_issuer";
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.OriginalIssuer = "my_original_issuer";
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            Assert.Contains(context.Principal.Claims, a => a.Issuer == "my_custom_issuer");
+                            Assert.Contains(context.Principal.Claims, a => a.OriginalIssuer == "my_original_issuer");
+                            return Task.FromResult<object>(null);
+                        }
+                    };
+                },
+                claimType: claimType);
+
+            var claims = new Dictionary<string, object>
+            {
+                { "sub", "SuperUserName" },
+                { "unique_name", "SuperUserName" },
+                { "roles", new[] { "Role1" } }
+            };
+
+            var response = await SendAsync(server.CreateClient().SetFakeJwtBearerToken(claims), "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("SuperUserName");
+        }
+
         [Fact]
         public async Task CanSendClaimsViaJwt()
         {
