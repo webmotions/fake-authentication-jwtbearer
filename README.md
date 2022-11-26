@@ -88,6 +88,24 @@ namespace Sample.WebApplication.Tests
             var response = await _host.GetTestServer().CreateClient().GetAsync("/api/weatherforecast");
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
+        
+        [Fact]
+        public async Task root_endpoint_should_authorized_when_jwt_is_set_with_using_claims_dictionary()
+        {
+            await _host.StartAsync();
+            var claims = new Dictionary<string, object>
+            {
+                { ClaimTypes.Name, "test@sample.com" },
+                { ClaimTypes.Role, "admin" },
+                { "http://mycompany.com/customClaim", "someValue" },
+            };
+
+            var httpClient = _host.GetTestServer().CreateClient();
+            httpClient.SetFakeBearerToken(claims);
+
+            var response = await httpClient.GetAsync("/api/weatherforecast");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
 
         public void Dispose()
         {
