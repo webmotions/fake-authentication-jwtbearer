@@ -31,7 +31,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321">
 			<PrivateAssets>all</PrivateAssets>
