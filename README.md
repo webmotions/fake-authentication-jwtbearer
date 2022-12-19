@@ -83,7 +83,7 @@ namespace Sample.WebApplication.Tests
         }
 
         [Fact]
-        public async Task root_endpoint_should_return_authorized_when_jwt_is_not_set()
+        public async Task root_endpoint_should_return_unauthorized_when_jwt_is_not_set()
         {
             await _host.StartAsync();
             var response = await _host.GetTestServer().CreateClient().GetAsync("/api/weatherforecast");
