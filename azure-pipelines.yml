@@ -29,9 +29,9 @@ stages:
     - checkout: self
     
     - task: UseDotNet@2 
-      displayName: '.NET Core 6.0.x'
+      displayName: '.NET Core 7.0.x'
       inputs:
-        version: '6.0.x'
+        version: '7.0.x'
         packageType: sdk    
 
     - task: DotNetCoreCLI@2
