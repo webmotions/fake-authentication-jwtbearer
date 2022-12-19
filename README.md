@@ -26,8 +26,9 @@ Clone and reference the project Fake.Authentication.JwtBearer under the src fold
 
 Now all the things are tied up, how to fake a user?
 
-I've defined two tests methods :
+I've defined three tests methods :
  - One that verifies a token through an Expando object
+ - One that verifies a token through a dictionary of claims
  - One that fails if the token is not set
 
  All of the below can be found under the samples folder
@@ -87,6 +88,22 @@ namespace Sample.WebApplication.Tests
             await _host.StartAsync();
             var response = await _host.GetTestServer().CreateClient().GetAsync("/api/weatherforecast");
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
+        public async Task root_endpoint_should_authorized_when_jwt_is_set_with_using_claims_dictionary()
+        {
+            await _host.StartAsync();
+            var claims = new Dictionary<string, object>
+            {
+                { ClaimTypes.Name, "test@sample.com" },
+                { ClaimTypes.Role, "admin" },
+                { "http://mycompany.com/customClaim", "someValue" },
+            };
+            var httpClient = _host.GetTestServer().CreateClient();
+            httpClient.SetFakeBearerToken(claims);
+            var response = await httpClient.GetAsync("/api/weatherforecast");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         public void Dispose()
