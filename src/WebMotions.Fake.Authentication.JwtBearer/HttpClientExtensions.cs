@@ -105,7 +105,7 @@ namespace System.Net
         }
 
         /// <summary>
-        /// Set a fake bearer token in form of a JWT.
+        /// Set a fake bearer token in form of a JWT form the list of claims.
         /// </summary>
         /// <param name="client"></param>
         /// <param name="claims"></param>
