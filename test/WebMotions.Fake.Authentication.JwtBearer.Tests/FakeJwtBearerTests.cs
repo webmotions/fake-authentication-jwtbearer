@@ -305,6 +305,25 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("TestClientId");
         }
 
+        [Fact]
+        public async Task CanSendClaimsViaJwtClaimList()
+        {
+            var claimType = "client_id";
+            var client = CreateServer(
+                options =>
+                {
+                    options.BearerValueType = FakeJwtBearerBearerValueType.Jwt;
+                },
+                claimType: claimType).CreateClient();
+
+            var claims = new List<Claim> { new Claim(claimType, "TestClientId"), };
+            client.SetFakeJwtBearerToken(claims);
+
+            var response = await SendAsync(client, "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("TestClientId");
+        }
+
         private static TestServer CreateServer(Action<FakeJwtBearerOptions> options = null, Func<HttpContext, Func<Task>, Task> handlerBeforeAuth = null, string claimType = ClaimTypes.NameIdentifier)
         {
             var builder = new WebHostBuilder()

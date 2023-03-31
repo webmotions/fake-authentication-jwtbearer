@@ -105,6 +105,21 @@ namespace System.Net
         }
 
         /// <summary>
+        /// Set a fake bearer token in form of a JWT form the list of claims.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="claims"></param>
+        /// <returns></returns>
+        public static HttpClient SetFakeJwtBearerToken(this HttpClient client, IEnumerable<Claim> claims)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddDays(7));
+
+            var jwt = tokenHandler.WriteToken(securityToken);
+            return client.SetToken(FakeJwtBearerDefaults.AuthenticationScheme, jwt);
+        }
+
+        /// <summary>
         /// Set raw token
         /// </summary>
         /// <param name="client"></param>
