@@ -49,7 +49,7 @@ stages:
         pwsh: true
         targetType: inline
         script: |
-          $output = dotnet list "$(Solution)" package --vulnerable
+          $output = dotnet list "$(Build.SourcesDirectory)\$(Solution)" package --vulnerable
           Write-Output $output
           $errors = $output | Select-String '>'
           if ($errors.Count -gt 0)
