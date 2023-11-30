@@ -16,6 +16,8 @@ This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://gi
 
  > If you need it for ASP.NET Core 6.0, check [Tag 6.1.1](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/6.1.1)
 
+ > If you need it for ASP.NET Core 7.0, check [Tag 7.0.0](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/7.0.0)
+
 **NOTE**: Version 4.0 was skipped to follow Microsoft versioning pattern for .NET
 
 ## How to install it?
