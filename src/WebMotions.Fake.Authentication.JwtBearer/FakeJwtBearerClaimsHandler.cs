@@ -29,7 +29,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <inheritdoc />
         public virtual ClaimsIdentity CreateClaimsIdentity(Dictionary<string, JsonElement> token)
         {
-            var identity = new ClaimsIdentity("FakeJwtBearer");
+            var identity = new ClaimsIdentity("FakeJwtBearer", Options.NameClaimType, Options.RoleClaimType);
 
             string issuer;
             string originalIssuer;
@@ -96,7 +96,7 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// <returns>A <see cref="ClaimsIdentity"/></returns>
         public virtual ClaimsIdentity CreateClaimsIdentity(string jwtToken)
         {
-            ClaimsIdentity identity = new ClaimsIdentity("FakeJwtBearer");
+            ClaimsIdentity identity = new ClaimsIdentity("FakeJwtBearer", Options.NameClaimType, Options.RoleClaimType);
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityToken = tokenHandler.ReadJwtToken(jwtToken);
 

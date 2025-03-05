@@ -27,5 +27,15 @@ namespace WebMotions.Fake.Authentication.JwtBearer
         /// Gets or sets whether to map the inbound claims using the inbound claims found in <see cref="JwtSecurityTokenHandler.DefaultInboundClaimTypeMap"/>. Defaults to <value>true</value>
         /// </summary>
         public bool MapInboundClaims { get; set; } = true;
+
+        /// <summary>
+        /// The claim type to use for name claims. Defaults to <see cref="ClaimTypes.Name"/>.
+        /// </summary>
+        public string NameClaimType { get; set; } = ClaimTypes.Name;
+
+        /// <summary>
+        /// The claim type to use for role claims. Defaults to <see cref="ClaimTypes.Role"/>.
+        /// </summary>
+        public string RoleClaimType { get; set; } = ClaimTypes.Role;
     }
 }
