@@ -249,6 +249,42 @@ namespace WebMotions.Fake.Authentication.JwtBearer.Tests
             response.ResponseText.Should().Be("SuperUserName");
         }
 
+        [Fact]
+        public async Task SetNameAndRoleRoleClaimOverride()
+        {
+            var server = CreateServer(
+                o =>
+                {
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.NameClaimType = "custom_name_claim";
+                    ((FakeJwtBearerClaimsHandler)o.SecurityTokenClaimHandler).Options.RoleClaimType = "custom_role_claim";
+
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            context.Principal.Identity.Name.Should().Be("Kathy Daugherty");
+                            context.Principal.IsInRole("admins").Should().BeTrue();
+                            return Task.FromResult<object>(null);
+                        }
+                    };
+                },
+                claimType: "custom_name_claim");
+
+            var client = server.CreateClient().SetFakeBearerToken(new
+            {
+                custom_name_claim = "Kathy Daugherty",
+                custom_role_claim = new[]
+                {
+                    "admins",
+                    "users"
+                }
+            });
+
+            var response = await SendAsync(client, "http://example.com/oauth");
+            response.Response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ResponseText.Should().Be("Kathy Daugherty");
+        }
+
         [Theory]
         [InlineData(ClaimTypes.NameIdentifier, true)]
         [InlineData("sub", false)]
