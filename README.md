@@ -18,7 +18,9 @@ This code is based on [Microsoft.AspNetCore.Authentication.JwtBearer](https://gi
 
  > If you need it for ASP.NET Core 7.0, check [Tag 7.0.0](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/7.0.0)
 
-  > If you need it for ASP.NET Core 8.0, check [Tag 8.0.2](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/8.0.2)
+ > If you need it for ASP.NET Core 8.0, check [Tag 8.0.2](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/8.0.2)
+
+ > If you need it for ASP.NET Core 9.0, check [Tag 9.0.0](https://github.com/DOMZE/fake-authentication-jwtbearer/tree/9.0.0)
 
 **NOTE**: Version 4.0 was skipped to follow Microsoft versioning pattern for .NET
 
